@@ -1,0 +1,1 @@
+What's the difference between broth and stock? Trying to read up on this question can leave you more confused than when you started. 
