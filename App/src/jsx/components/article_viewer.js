@@ -19,7 +19,7 @@ export var ArticleViewer = function (_React$Component) {
 
         _this.state = {
             httpUtility: props.httpUtility,
-            articles: [{ title: "The Beginner's Survival Guide to Cooking", file: "beginnersguide", published: "Jan 10 2021" }, { title: "Skills you should learn", file: "skills", published: "Jan 10 2021" }, { title: "Dimensions of Flavor", file: "flavor", published: "Jan 14 2021" }, { title: "How to Cook Chicken Breast", file: "chickenbreast", published: "Feb 7 2021" }] };
+            articles: [{ title: "About Pantrymo", file: "about", published: "Feb 13 2021" }, { title: "The Beginner's Survival Guide to Cooking", file: "beginnersguide", published: "Jan 10 2021" }, { title: "Skills you should learn", file: "skills", published: "Jan 10 2021" }, { title: "Dimensions of Flavor", file: "flavor", published: "Jan 14 2021" }, { title: "How to Cook Chicken Breast", file: "chickenbreast", published: "Feb 7 2021" }] };
         return _this;
     }
 

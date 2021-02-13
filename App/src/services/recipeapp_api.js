@@ -8,6 +8,13 @@ export class RecipeAppApi
         this.pageSize=settings.pageSize;
     }
 
+    getCuisinesByIngredients(ingredients)
+    {
+        var ingredientsCSV = ingredients.join(",");
+        return this.httpUtility.getJson(`https://${settings.host}/api/Cuisines/ByIngredients?ingredients=${ingredientsCSV}`, this.validResult)
+        .catch(this.showErrorInConsole);
+    }
+
     recipeSearch(query, selectedCuisines, page)
     {  
         const from = (page-1) * this.pageSize;
@@ -15,24 +22,19 @@ export class RecipeAppApi
            
         const cuisineCSV = selectedCuisines.map(c=> c.name).join(",");
         
-        return this.httpUtility.getJson(`https://${settings.host}/api/Recipe/Find?ingredients=${query}&cuisines=${cuisineCSV}&from=${from}&to=${to}`, this.validateRecipeSearch)
+        return this.httpUtility.getJson(`https://${settings.host}/api/Recipe/Find?ingredients=${query}&cuisines=${cuisineCSV}&from=${from}&to=${to}`, this.validResult)
             .catch(this.showErrorInConsole)
             .then(r=> { return { page: page, recipes: r, loaded:true }});
     }
 
     ingredientSearch(query)
     {
-        return this.httpUtility.getJson(`https://${settings.host}/api/Ingredient/Suggest?text=${query}`, this.validateIngredientSearch)
+        return this.httpUtility.getJson(`https://${settings.host}/api/Ingredient/Suggest?text=${query}`, this.validResult)
             .catch(this.showErrorInConsole);
 
     }
 
-    validateIngredientSearch(result)
-    {
-        return result && result.length > 0;
-    }
-
-    validateRecipeSearch(result)
+    validResult(result)
     {
         return result && result.length > 0;
     }

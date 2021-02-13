@@ -42,6 +42,7 @@ export var RecipeApp = function (_React$Component) {
         _this.sortRecipesBelowWindow = _this.sortRecipesBelowWindow.bind(_this);
         _this.scrollToFirstResultIfNeeded = _this.scrollToFirstResultIfNeeded.bind(_this);
         _this.insertAds = _this.insertAds.bind(_this);
+        _this.updateCuisines = _this.updateCuisines.bind(_this);
 
         var httpUtility = props.httpUtility;
         var stateHandler = new StateHandler();
@@ -73,7 +74,26 @@ export var RecipeApp = function (_React$Component) {
             if (ingredients.includes(ingredient)) return;
 
             ingredients.push(ingredient);
+
+            this.updateCuisines(ingredients);
             this.updateRecipes(ingredients, true);
+        }
+    }, {
+        key: 'updateCuisines',
+        value: function updateCuisines(ingredients) {
+            var _this2 = this;
+
+            this.state.recipeAppApi.getCuisinesByIngredients(ingredients).then(function (cuisineNames) {
+
+                var cuisines = _this2.state.cuisines;
+                var orderedCuisines = cuisineNames.map(function (c) {
+                    return cuisines.find(function (p) {
+                        return p.name == c;
+                    });
+                });
+
+                _this2.setState({ cuisines: orderedCuisines });
+            });
         }
     }, {
         key: 'updateRecipes',
@@ -206,6 +226,7 @@ export var RecipeApp = function (_React$Component) {
                 return ing != ingredient;
             });
             this.updateRecipes(ingredients, true);
+            this.updateCuisines(ingredients);
         }
     }, {
         key: 'onCuisineToggled',
@@ -247,7 +268,7 @@ export var RecipeApp = function (_React$Component) {
     }, {
         key: 'prepareSite',
         value: function prepareSite() {
-            var _this2 = this;
+            var _this3 = this;
 
             this.state.recipeAppApi.getCuisineNames().catch(function (e) {
                 console.log(e);
@@ -256,11 +277,11 @@ export var RecipeApp = function (_React$Component) {
                     var cuisines = names.map(function (n) {
                         return { name: n, selected: false };
                     });
-                    _this2.setState({ cuisines: cuisines, isSiteReady: true });
-                    _this2.setInitialState();
+                    _this3.setState({ cuisines: cuisines, isSiteReady: true });
+                    _this3.setInitialState();
                 } else {
-                    _this2.setState({ cuisines: [], isSiteReady: false });
-                    setTimeout(_this2.prepareSite, 1000);
+                    _this3.setState({ cuisines: [], isSiteReady: false });
+                    setTimeout(_this3.prepareSite, 1000);
                 }
             });
         }
@@ -375,18 +396,18 @@ export var RecipeApp = function (_React$Component) {
                 return React.createElement(
                     'section',
                     null,
-                    React.createElement(CuisinePicker, { cuisines: this.state.cuisines, onCuisineToggled: this.onCuisineToggled }),
                     React.createElement(
                         'section',
                         { className: 'whiteBox', id: 'ingredientPickerContainer' },
                         React.createElement(
                             'h2',
                             null,
-                            'What\'s in your kitchen?'
+                            'Tell us what ingredients you have and we\'ll find recipes you can cook!'
                         ),
                         React.createElement(IngredientInputBox, { onIngredientAdded: this.onIngredientAdded, recipeAppApi: this.state.recipeAppApi, selectedIngredients: this.state.selectedIngredients }),
                         React.createElement(SelectedIngredientsPanel, { selectedIngredients: this.state.selectedIngredients, onIngredientRemoved: this.onIngredientRemoved })
                     ),
+                    React.createElement(CuisinePicker, { cuisines: this.state.cuisines, onCuisineToggled: this.onCuisineToggled }),
                     React.createElement(BackToTopPanel, null),
                     React.createElement(RecipesList, { loading: this.state.loadingRecipes, recipes: this.state.recipes, selectedIngredients: this.state.selectedIngredients, debug: this.state.debug })
                 );

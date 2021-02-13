@@ -5,6 +5,15 @@
     <meta name="description" content="Tell us what ingredients you have in your kitchen and we'll suggest recipes for you."/>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4EGZMJKD08"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-4EGZMJKD08');
+    </script>
   </head>
   <body>
     
@@ -16,26 +25,8 @@
       </section>
     </div>
 
-    <section id="helpSection" class="help whiteBox">
-      <section>Pantrymo can help you to...</section>
-      <ul>
-        <li>
-          <h1>Get inspired:</h1> <p>Find new recipes you can cook, using ingredients you already have!</p>
-        </li>
-        <li>
-          <h1>Stop wasting food:</h1> <p>Find out what you can do with all those leftover ingredients from other recipes, instead of letting them go bad.</p>
-        </li>
-        <li>
-          <h1>Stop buying ingredients you'll never use again:</h1> <p>Pantrymo favors recipes that use common, everyday ingredients.</p>
-        </li>
-        <li>
-          <h1>Shop less, eat better:</h1> <p>Pantrymo will help you find recipes with what you already have in your kitchen, instead of making you dash to the store for that <i>one</i> ingredient you're missing!</p>
-        </li>
-      </ul>
-    </section>
-    
     <footer>
-      <p>v0.4.0</p>
+      <p>v0.5.0</p>
       <p className='email text'>For questions and problems e-mail us at <span className='email' id='email' /></p>
       <section id="edamam-badge" data-color="badge" style="float:right"></section>
     </footer>

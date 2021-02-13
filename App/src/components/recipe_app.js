@@ -31,6 +31,7 @@ export class RecipeApp extends React.Component
       this.sortRecipesBelowWindow = this.sortRecipesBelowWindow.bind(this);
       this.scrollToFirstResultIfNeeded = this .scrollToFirstResultIfNeeded.bind(this);
       this.insertAds = this.insertAds.bind(this);
+      this.updateCuisines = this.updateCuisines.bind(this);
 
       var httpUtility = props.httpUtility;
       var stateHandler = new StateHandler();
@@ -61,7 +62,23 @@ export class RecipeApp extends React.Component
         return;
         
       ingredients.push(ingredient);
+
+      this.updateCuisines(ingredients);
       this.updateRecipes(ingredients, true);
+    }
+
+    updateCuisines(ingredients)
+    {
+      this.state.recipeAppApi.getCuisinesByIngredients(ingredients)
+      .then(cuisineNames => {
+
+          let cuisines = this.state.cuisines;
+          let orderedCuisines = cuisineNames.map(c=>{
+            return cuisines.find(p=>p.name == c);
+          })
+
+          this.setState({cuisines: orderedCuisines});
+      });
     }
 
     updateRecipes(ingredients, autoScroll)
@@ -195,7 +212,8 @@ export class RecipeApp extends React.Component
     onIngredientRemoved(ingredient)
     {
         var ingredients = this.state.selectedIngredients.filter(ing=> ing != ingredient);
-        this.updateRecipes(ingredients,true);
+        this.updateRecipes(ingredients,true);    
+        this.updateCuisines(ingredients);
     }
 
     onCuisineToggled(cuisine)
@@ -360,12 +378,15 @@ export class RecipeApp extends React.Component
         {
           return (     
             <section>   
-              <CuisinePicker cuisines={this.state.cuisines} onCuisineToggled={this.onCuisineToggled} />         
+
               <section className="whiteBox" id="ingredientPickerContainer">
-                <h2>What&apos;s in your kitchen?</h2>
+                <h2>Tell us what ingredients you have and we&apos;ll find recipes you can cook!</h2>
                 <IngredientInputBox onIngredientAdded={this.onIngredientAdded} recipeAppApi={this.state.recipeAppApi} selectedIngredients={this.state.selectedIngredients} />
                 <SelectedIngredientsPanel selectedIngredients={this.state.selectedIngredients} onIngredientRemoved={this.onIngredientRemoved} />
-              </section>              
+              </section>           
+
+              <CuisinePicker cuisines={this.state.cuisines} onCuisineToggled={this.onCuisineToggled} />         
+                 
               <BackToTopPanel />
               <RecipesList loading={this.state.loadingRecipes} recipes={this.state.recipes} selectedIngredients={this.state.selectedIngredients} debug={this.state.debug} />
             </section>);

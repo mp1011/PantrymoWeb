@@ -9,6 +9,7 @@ export class ArticleViewer extends React.Component
       this.state = { 
                     httpUtility: props.httpUtility,
                     articles: [ 
+                                { title: "About Pantrymo", file: "about", published: "Feb 13 2021" },
                                 { title: "The Beginner's Survival Guide to Cooking", file: "beginnersguide", published: "Jan 10 2021" },
                                 { title: "Skills you should learn", file: "skills", published: "Jan 10 2021" },
                                 { title: "Dimensions of Flavor", file: "flavor", published: "Jan 14 2021" },

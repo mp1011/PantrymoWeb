@@ -89,11 +89,6 @@ export var Shell = function (_React$Component) {
                     React.createElement(
                         Route,
                         { path: '/' },
-                        React.createElement(
-                            'p',
-                            { className: 'mainTitle' },
-                            'Tell us what ingredients you have and we\'ll find recipes you can cook!'
-                        ),
                         React.createElement(RecipeApp, { httpUtility: this.state.httpUtility })
                     )
                 )

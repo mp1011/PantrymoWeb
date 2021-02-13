@@ -65,6 +65,9 @@ html
 
 .mainTitle h1
 {
+
+    width:100%;
+    text-align: center;
     font-family: gilsan, 'Times New Roman', Times, serif, cursive;
     font-size:45px;
     color:rgb(255, 255, 255);
@@ -81,7 +84,6 @@ html
     .mainTitle 
     {
         justify-content: space-between;
-        flex-direction: row;
     }
 
     .mainTitle h1
@@ -111,13 +113,26 @@ nav
     margin:0rem;
     padding:0rem;
     height: 1.8rem;
+    margin-left: auto;
+    margin-right:auto;
     
     font-size:1rem;
 }
 
+
+@media(min-width:1200px)
+{
+    nav 
+    {
+        width:25%;
+    }
+}
+
+
 nav ul
 {
     display:flex;
+    justify-content: center;
     list-style-type: none;
     vertical-align: middle;
     line-height: 1.8rem;
@@ -127,9 +142,12 @@ nav ul
 
 nav li 
 {
+    flex-basis: 1;
     font-weight: bold;
+    text-align: center;
     text-decoration: none;
     color: black;
+    flex-grow: 1;
 }
 
 
@@ -152,12 +170,16 @@ nav li a
 
 nav .active
 {    
-    font-size:1.2rem;
+    font-size:1.4rem;
 }
 
 body 
 {
-    background-color: rgb(23, 43, 28);
+    background-color: rgb(2, 19, 6);
+    background-image: url("/style/romanesco.jpg");
+    /*background-image: url("/style/peppers.jpg");*/
+    background-attachment: fixed;    
+    background-size: cover;
 }
 
 .articlePage
@@ -266,9 +288,11 @@ ul.articleList li:not(:last-child)
     background-color: rgb(204, 226, 178);
     background: radial-gradient(circle, rgb(235, 241, 227) 47%, rgb(233, 241, 222) 60%, rgb(216, 223, 207) 87%);
     border-top: solid 2px rgb(115, 122, 124);
+    border-left: solid 2px rgb(115, 122, 124);    
     border-right: solid 2px rgb(4, 23, 44);
+    border-bottom: solid 2px rgb(4, 23, 44);
    
-    margin:1.5rem 0 1.5rem 0;
+    margin:1.5rem 1rem 1.5rem 1rem;
     padding:0.5rem;
 }
 
@@ -294,6 +318,11 @@ ul.articleList li:not(:last-child)
     color:rgb(29, 0, 0);
     font-size: medium;
     border-bottom: solid 1px black;
+}
+
+#ingredientPickerContainer h2
+{
+    font-size:1.5rem;
 }
 
 .recipe h2 
@@ -396,7 +425,6 @@ ul.articleList li:not(:last-child)
 {
     background-color: rgb(126, 206, 119);
     border: solid 2px rgb(127, 127, 175);
-    padding:0.2rem;
 }
 
 .cuisineList input:hover
@@ -408,7 +436,6 @@ ul.articleList li:not(:last-child)
 {
     background-color: rgb(143, 206, 137);
     border: solid 2px rgb(127, 127, 175);
-    padding:0.2rem;
 }
 
 .ingredientsList
@@ -421,11 +448,22 @@ ul.articleList li:not(:last-child)
 
 .ingredientsList li
 {
-    border-radius: 10px;
-    margin-right: 1.0rem;
+    
     margin-bottom:0.5rem;
     padding:0.5rem;
     font-weight: bold;
+}
+
+.ingredientsList li:first-child
+{
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px; 
+}
+
+.ingredientsList li:last-child
+{
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px; 
 }
 
 .recipe .ingredientsList li 
@@ -439,19 +477,34 @@ ul.articleList li:not(:last-child)
 {
     font-weight: bold;
     background-color: inherit;
+    font-family: 'Ebrima';
+    text-transform: capitalize;
+    background:transparent;
     border:0;
     padding:0;
-    margin:0 32px 0 0;
+    margin:0;
 }
 
 .chosenIngredient
 {
-    border:solid 1px rgb(31, 73, 15);
+    border-top:solid 1px rgb(31, 73, 15);
+    border-bottom:solid 1px rgb(31, 73, 15);
+    border-right:solid 1px rgb(31, 73, 15);    
     background-color: rgb(160, 238, 129);
+    
+}
+
+.chosenIngredient:hover
+{
     background-image: url('/style/redx.gif');
-    background-position: center right 5px;
+    background-position: center center;
     background-repeat: no-repeat;
     background-size:28px;
+}
+
+.chosenIngredient:first-child
+{
+    border-left:solid 1px rgb(31, 73, 15);
 }
 
 .commonIngredient input 
@@ -485,7 +538,7 @@ footer
 {
     font-size:smaller;
     margin-left:1rem;
-    color:white;
+    color:black;
 }
 
 .backToTopPanel

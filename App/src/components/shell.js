@@ -48,8 +48,7 @@ export class Shell extends React.Component
             <Route path="/articles">
                 <ArticleViewer httpUtility={this.state.httpUtility}/>
             </Route>
-            <Route path="/">
-                <p className="mainTitle">Tell us what ingredients you have and we&apos;ll find recipes you can cook!</p>
+            <Route path="/">    
                 <RecipeApp httpUtility={this.state.httpUtility}/>
             </Route>
           </Switch>
