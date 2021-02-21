@@ -39,14 +39,14 @@ export class CuisinePicker extends React.Component
                 return "";
 
             title="Browse Ingredients by Cuisine";
-            subTitle="Choose a cuisine to see which ingredients appear in the most recipes.";
+            subTitle=<p>Choose a cuisine to see which ingredients appear in the most recipes.</p>;
 
             cuisineButtons.push(this.props.cuisines.map(c=> this.addCuisineButton(c.name, true,false)));
         }
         else 
         {
             title="Which cuisines do you cook at home?";
-            subTitle="<i>(Optional)</i> Choose the cuisines you usually cook and we'll suggest recipes using ingredients common to those cuisines.";
+            subTitle= <p><i>(Optional)</i> Choose the cuisines you usually cook and we'll suggest recipes using ingredients common to those cuisines.</p>;
 
             if(!this.props.rankedCuisines ||
                 (this.props.rankedCuisines.best.length == 0 
@@ -65,7 +65,7 @@ export class CuisinePicker extends React.Component
 
         return  <section className="whiteBox cuisinePicker">
                     <h2>{title}</h2>
-                    <p>{subTitle}</p>
+                    {subTitle}
                     <ul className="cuisineList">{cuisineButtons}{showMoreButton}</ul>  
                     
                 </section>

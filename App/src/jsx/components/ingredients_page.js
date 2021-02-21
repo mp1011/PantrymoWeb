@@ -60,17 +60,21 @@ export var IngredientsPage = function (_React$Component) {
             this.state.recipeAppApi.rankIngredientsByCuisine(cuisine.name).then(function (r) {
                 _this3.setState({ rankedIngredients: r, cuisines: cuisines });
             });
+
+            this.setState({ selectedCuisine: cuisine.name });
         }
     }, {
         key: 'render',
         value: function render() {
+            var _this4 = this;
+
             if (!this.state.cuisines) return "";
 
             var tree = "";
 
             if (this.state.rankedIngredients) {
                 var list = this.state.rankedIngredients.rankedChildren.map(function (c) {
-                    return React.createElement(IngredientTree, { key: c.name, ingredients: c });
+                    return React.createElement(IngredientTree, { key: c.name, ingredients: c, selectedCuisine: _this4.state.selectedCuisine });
                 });
 
                 tree = React.createElement(
@@ -102,19 +106,88 @@ export var IngredientTree = function (_React$Component2) {
     function IngredientTree(props) {
         _classCallCheck(this, IngredientTree);
 
-        return _possibleConstructorReturn(this, (IngredientTree.__proto__ || Object.getPrototypeOf(IngredientTree)).call(this, props));
+        var _this5 = _possibleConstructorReturn(this, (IngredientTree.__proto__ || Object.getPrototypeOf(IngredientTree)).call(this, props));
+
+        _this5.showMoreButtonClicked = _this5.showMoreButtonClicked.bind(_this5);
+        _this5.shouldHide = _this5.shouldHide.bind(_this5);
+        return _this5;
     }
 
     _createClass(IngredientTree, [{
+        key: 'showMoreButtonClicked',
+        value: function showMoreButtonClicked(e) {
+            var parentList = e.target.parentElement.parentElement;
+
+            var listItems = parentList.getElementsByTagName("li");
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+                for (var _iterator = listItems[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var item = _step.value;
+
+                    item.style["display"] = "inherit";
+                }
+            } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                        _iterator.return();
+                    }
+                } finally {
+                    if (_didIteratorError) {
+                        throw _iteratorError;
+                    }
+                }
+            }
+
+            e.target.style.display = "none";
+        }
+    }, {
+        key: 'shouldHide',
+        value: function shouldHide(item, thisIndex, totalCount) {
+            var maxItemsPerNode = 4;
+
+            if (thisIndex < maxItemsPerNode) return false;
+
+            //allow if its the last item in the list, and it has no children
+            if (totalCount == maxItemsPerNode + 1 && thisIndex == totalCount - 1 && item.rankedChildren.length == 0) return false;
+
+            return true;
+        }
+    }, {
         key: 'render',
         value: function render() {
+            var _this6 = this;
+
+            var displayStyle = {};
+
+            if (this.props.shouldHide) {
+                displayStyle = { display: 'none' };
+            }
+
             var innerList = "";
             var percent = (this.props.ingredients.frequency * 100).toFixed(0) + "%";
 
+            var colorClass = "";
+            if (this.props.ingredients.frequency >= 0.5) colorClass = "green";else if (this.props.ingredients.frequency >= 0.1) colorClass = "yellow";else if (this.props.ingredients.frequency > 0) colorClass = "orange";else colorClass = "hide";
+
             if (this.props.ingredients.rankedChildren.length > 0) {
-                var childElements = this.props.ingredients.rankedChildren.map(function (c) {
-                    return React.createElement(IngredientTree, { key: c.name, ingredients: c });
+                var itemCount = this.props.ingredients.rankedChildren.length;
+                var childElements = this.props.ingredients.rankedChildren.map(function (c, ix) {
+                    return React.createElement(IngredientTree, { key: c.name, shouldHide: _this6.shouldHide(c, ix, itemCount), ingredients: c, selectedCuisine: _this6.props.selectedCuisine });
                 });
+
+                if (childElements.some(function (p) {
+                    return p.props.shouldHide;
+                })) childElements.push(React.createElement(
+                    'li',
+                    { key: 'showMore' },
+                    React.createElement('input', { type: 'button', value: '\u25BC Show more...', className: 'showMoreIngredients', onClick: this.showMoreButtonClicked })
+                ));
 
                 innerList = React.createElement(
                     'ul',
@@ -125,14 +198,14 @@ export var IngredientTree = function (_React$Component2) {
 
             return React.createElement(
                 'li',
-                null,
+                { style: displayStyle },
                 React.createElement(
-                    'section',
-                    { className: 'ingredientName' },
+                    'a',
+                    { href: '/#ingredients=' + this.props.ingredients.name + '&cuisines=' + this.props.selectedCuisine, className: 'ingredientName' },
                     this.props.ingredients.name,
                     React.createElement(
                         'section',
-                        { className: 'percent' },
+                        { className: "percent " + colorClass },
                         percent
                     )
                 ),

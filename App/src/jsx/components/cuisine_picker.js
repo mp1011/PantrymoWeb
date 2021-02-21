@@ -70,14 +70,27 @@ export var CuisinePicker = function (_React$Component) {
                 if (!this.props.cuisines) return "";
 
                 title = "Browse Ingredients by Cuisine";
-                subTitle = "Choose a cuisine to see which ingredients appear in the most recipes.";
+                subTitle = React.createElement(
+                    "p",
+                    null,
+                    "Choose a cuisine to see which ingredients appear in the most recipes."
+                );
 
                 cuisineButtons.push(this.props.cuisines.map(function (c) {
                     return _this2.addCuisineButton(c.name, true, false);
                 }));
             } else {
                 title = "Which cuisines do you cook at home?";
-                subTitle = "<i>(Optional)</i> Choose the cuisines you usually cook and we'll suggest recipes using ingredients common to those cuisines.";
+                subTitle = React.createElement(
+                    "p",
+                    null,
+                    React.createElement(
+                        "i",
+                        null,
+                        "(Optional)"
+                    ),
+                    " Choose the cuisines you usually cook and we'll suggest recipes using ingredients common to those cuisines."
+                );
 
                 if (!this.props.rankedCuisines || this.props.rankedCuisines.best.length == 0 && this.props.rankedCuisines.good.length == 0 && this.props.rankedCuisines.other.length == 0) return "";
 
@@ -106,11 +119,7 @@ export var CuisinePicker = function (_React$Component) {
                     null,
                     title
                 ),
-                React.createElement(
-                    "p",
-                    null,
-                    subTitle
-                ),
+                subTitle,
                 React.createElement(
                     "ul",
                     { className: "cuisineList" },
