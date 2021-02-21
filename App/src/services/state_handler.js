@@ -2,23 +2,57 @@ export class StateHandler
 {
     updateUrl(data)
     {
-        let ingredientList = data.ingredients ? data.ingredients.join() : this.getIngredientsFromHash();
-        let cuisineList = data.cuisines ? data.cuisines.join() : this.getCuisinesFromHash();
+        let ingredients = data.ingredients ?? this.getIngredientsFromHash() ?? [];
+        let cuisines = data.cuisines ?? this.getCuisinesFromHash() ?? [];
 
-        let hash = `ingredients=${ingredientList}&cuisines=${cuisineList}`;
+        let ingredientList = ingredients.join();
+        let cuisineList = cuisines.join();
 
-        globalThis.window.location.hash = hash;       
+        let newHash="";
+
+        if(ingredients.length > 0 && cuisines.length > 0)
+        {
+            newHash = `ingredients=${ingredientList}&cuisines=${cuisineList}`;       
+            document.title = `Pantrymo - ${ingredientList}`;
+        }
+        else if(ingredients.length > 0)
+        {
+            newHash = `ingredients=${ingredientList}`;    
+            document.title = `Pantrymo - ${ingredientList}`;
+        }
+        else if(cuisines.length > 0)
+        {
+            newHash = `cuisines=${cuisineList}`;
+            document.title = "Pantrymo";
+        }
+        else 
+        {
+            newHash = "";          
+            document.title = "Pantrymo";
+        }
+
+        if(window.location.hash.substring(1) != newHash)
+        {
+            console.log("Pushing state: " + newHash);
+            history.pushState(data, "", `${window.location.pathname}#${newHash}`);
+        }
+
+        return globalThis.window.location.href;
     }
 
     getInitialState()
     {
-        let ingredients = this.getIngredientsFromSession() ?? this.getIngredientsFromHash();
-        let selectedCuisines = this.getCuisinesFromSession() ?? this.getCuisinesFromHash();
+        let ingredients = this.getIngredientsFromHash() ?? this.getIngredientsFromSession() ?? [];
+        let selectedCuisines = this.getCuisinesFromHash() ?? this.getCuisinesFromSession() ?? [];
+
         if(selectedCuisines.length == 0)
             selectedCuisines = this.getCuisinesFromCookie();
 
         this.updateUrl({ cuisines: selectedCuisines, ingredients: ingredients });
-        return { selectedCuisines: selectedCuisines, selectedIngredients: ingredients};
+
+        let state = { selectedCuisines: selectedCuisines, selectedIngredients: ingredients};
+
+        return state;
     }
 
     getIngredientsFromSession()
@@ -78,11 +112,9 @@ export class StateHandler
         window.sessionStorage.setItem('ingredients', ingredients);
     }
 
-    
-
     onCuisineToggled(cuisine)
     {
-        var cuisines = this.getCuisinesFromHash();
+        var cuisines = this.getCuisinesFromHash() ?? [];
         if(cuisine.selected && !cuisines.includes(cuisine.name))
         {
             cuisines.push(cuisine.name);
@@ -100,40 +132,48 @@ export class StateHandler
     getIngredientsFromHash()
     {
         if(!window.location.hash)
-            return [];
+            return null;
 
         try
         {
-            return window.location.hash
+            let result = window.location.hash
                         .split('&')[0]
                         .split('=')[1]
                         .split(',')
                         .map(c=> decodeURIComponent(c))
                         .filter(c=>c.length>0);
+            if(result.length > 0)
+                return result;
+            else 
+                return null;
         }
         catch 
         {
-            return [];
+            return null;
         }
     }
 
     getCuisinesFromHash()
     {
         if(!window.location.hash)
-            return [];
+            return null;
 
         try
         {
-            return window.location.hash
+            let result = window.location.hash
                         .split('&')[1]
                         .split('=')[1]
                         .split(',')
                         .map(c=> decodeURIComponent(c))
                         .filter(c=>c.length>0);
+            if(result.length > 0)
+                return result;
+            else 
+                return null;
         }
         catch 
         {
-            return [];
+            return null;
         }
     }
 }

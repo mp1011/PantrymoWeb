@@ -1,8 +1,8 @@
 export var settings=
 { 
-    host: "whatcanicookapi.azurewebsites.net",
+    host: "localhost:44329",
     debugMode: false,
-    enableCache: window.caches,
+    enableCache: true,
     pageSize:50,
     email: "pantrymonium@gmail.com",
     adEvery: 0

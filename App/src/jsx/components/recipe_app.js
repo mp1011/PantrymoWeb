@@ -83,16 +83,8 @@ export var RecipeApp = function (_React$Component) {
         value: function updateCuisines(ingredients) {
             var _this2 = this;
 
-            this.state.recipeAppApi.getCuisinesByIngredients(ingredients).then(function (cuisineNames) {
-
-                var cuisines = _this2.state.cuisines;
-                var orderedCuisines = cuisineNames.map(function (c) {
-                    return cuisines.find(function (p) {
-                        return p.name == c;
-                    });
-                });
-
-                _this2.setState({ cuisines: orderedCuisines });
+            this.state.recipeAppApi.getCuisinesByIngredients(ingredients).then(function (rankedCuisines) {
+                _this2.setState({ rankedCuisines: rankedCuisines });
             });
         }
     }, {
@@ -262,13 +254,19 @@ export var RecipeApp = function (_React$Component) {
     }, {
         key: 'componentDidMount',
         value: function componentDidMount() {
+            var _this3 = this;
+
             this.prepareSite();
+
+            window.onpopstate = function () {
+                return _this3.setInitialState();
+            };
             window.addEventListener('scroll', this.onScroll);
         }
     }, {
         key: 'prepareSite',
         value: function prepareSite() {
-            var _this3 = this;
+            var _this4 = this;
 
             this.state.recipeAppApi.getCuisineNames().catch(function (e) {
                 console.log(e);
@@ -277,11 +275,11 @@ export var RecipeApp = function (_React$Component) {
                     var cuisines = names.map(function (n) {
                         return { name: n, selected: false };
                     });
-                    _this3.setState({ cuisines: cuisines, isSiteReady: true });
-                    _this3.setInitialState();
+                    _this4.setState({ cuisines: cuisines, isSiteReady: true });
+                    _this4.setInitialState();
                 } else {
-                    _this3.setState({ cuisines: [], isSiteReady: false });
-                    setTimeout(_this3.prepareSite, 1000);
+                    _this4.setState({ cuisines: [], isSiteReady: false });
+                    setTimeout(_this4.prepareSite, 1000);
                 }
             });
         }
@@ -309,6 +307,7 @@ export var RecipeApp = function (_React$Component) {
 
             if (initialState.selectedIngredients.length > 0) {
                 this.updateRecipes(initialState.selectedIngredients, false);
+                this.updateCuisines(initialState.selectedIngredients);
             }
         }
     }, {
@@ -407,7 +406,7 @@ export var RecipeApp = function (_React$Component) {
                         React.createElement(IngredientInputBox, { onIngredientAdded: this.onIngredientAdded, recipeAppApi: this.state.recipeAppApi, selectedIngredients: this.state.selectedIngredients }),
                         React.createElement(SelectedIngredientsPanel, { selectedIngredients: this.state.selectedIngredients, onIngredientRemoved: this.onIngredientRemoved })
                     ),
-                    React.createElement(CuisinePicker, { cuisines: this.state.cuisines, onCuisineToggled: this.onCuisineToggled }),
+                    React.createElement(CuisinePicker, { cuisines: this.state.cuisines, rankedCuisines: this.state.rankedCuisines, onCuisineToggled: this.onCuisineToggled }),
                     React.createElement(BackToTopPanel, null),
                     React.createElement(RecipesList, { loading: this.state.loadingRecipes, recipes: this.state.recipes, selectedIngredients: this.state.selectedIngredients, debug: this.state.debug })
                 );

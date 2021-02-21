@@ -421,6 +421,16 @@ ul.articleList li:not(:last-child)
     font-family: 'Ebrima';
 }
 
+.cuisineList li.topMatch input
+{
+    font-weight: bold;
+}
+
+.cuisineList li.otherMatch 
+{
+    display:none;
+}
+
 .cuisineList input.selected
 {
     background-color: rgb(126, 206, 119);
@@ -637,4 +647,62 @@ footer
     font-size: 1.0rem;
     display:inline;    
     font-family: 'Ebrima';
+}
+
+.ingredientsTree li section
+{
+    display:inline-block;
+    text-transform: capitalize;
+    padding:0.2rem;
+    
+}
+
+#ingredientsTreeContainer 
+{
+    width:100%;
+    white-space:pre;
+    height: 700px;
+    white-space: normal;
+}
+
+ul.ingredientsTree
+{
+    display:flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.ingredientsTree li
+{
+    padding-left: 2rem;
+    list-style-type: none;
+    flex-basis: 0;
+    flex-grow: 1;    
+}
+
+.ingredientsTree .ingredientName
+{
+    font-family: 'Ebrima';
+    white-space: nowrap;
+    width:100%;
+    
+    background-color: white;
+    border-right: solid 2px green;
+    border-left: solid 2px green;
+}
+
+.ingredientsTree .ingredientName .percent 
+{
+    border-top:solid 1px rgb(12, 87, 2);
+    border-left:solid 1px rgb(27, 95, 25);
+    border-bottom:solid 1px rgb(1, 46, 16); 
+    border-right:solid 1px rgb(10, 39, 5);
+    
+    border-radius: 20px;
+    background-color: rgb(7, 63, 19);
+    background: radial-gradient(circle, rgb(23, 51, 7) 47%, rgb(30, 83, 44) 60%, rgb(34, 54, 5) 87%);
+    color:white;
+    font-weight: bold;
+    padding: 0 10px 0 10px;
+    margin-left:1rem;
 }

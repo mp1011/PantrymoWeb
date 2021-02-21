@@ -1,4 +1,5 @@
 import {RecipeApp} from '/src/jsx/components/recipe_app.js'
+import {IngredientsPage} from '/src/jsx/components/ingredients_page.js'
 import {ArticleViewer} from '/src/jsx/components/article_viewer.js'
 import {settings} from '/src/app_settings.mjs'
 import {CachedHttpUtility} from '/src/services/cached_http_utility.js'
@@ -38,7 +39,10 @@ export class Shell extends React.Component
                             <NavLink activeClassName='active' exact={true} to="/">Recipe Search</NavLink>
                         </li>
                         <li>
-                            <NavLink activeClassName='active' to="/articles">Cooking Guides</NavLink>
+                            <NavLink activeClassName='active' to="/articles">Articles</NavLink>
+                        </li>
+                        <li>
+                            <NavLink activeClassName='active' to="/ingredients">Ingredients</NavLink>
                         </li>
                     </ul>
                 </nav>
@@ -47,6 +51,9 @@ export class Shell extends React.Component
           <Switch>
             <Route path="/articles">
                 <ArticleViewer httpUtility={this.state.httpUtility}/>
+            </Route>
+            <Route path="/ingredients">
+                <IngredientsPage httpUtility={this.state.httpUtility}/>
             </Route>
             <Route path="/">    
                 <RecipeApp httpUtility={this.state.httpUtility}/>

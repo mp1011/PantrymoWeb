@@ -7,6 +7,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 import { RecipeApp } from '/src/jsx/components/recipe_app.js';
+import { IngredientsPage } from '/src/jsx/components/ingredients_page.js';
 import { ArticleViewer } from '/src/jsx/components/article_viewer.js';
 import { settings } from '/src/app_settings.mjs';
 import { CachedHttpUtility } from '/src/services/cached_http_utility.js';
@@ -72,7 +73,16 @@ export var Shell = function (_React$Component) {
                                 React.createElement(
                                     NavLink,
                                     { activeClassName: 'active', to: '/articles' },
-                                    'Cooking Guides'
+                                    'Articles'
+                                )
+                            ),
+                            React.createElement(
+                                'li',
+                                null,
+                                React.createElement(
+                                    NavLink,
+                                    { activeClassName: 'active', to: '/ingredients' },
+                                    'Ingredients'
                                 )
                             )
                         )
@@ -85,6 +95,11 @@ export var Shell = function (_React$Component) {
                         Route,
                         { path: '/articles' },
                         React.createElement(ArticleViewer, { httpUtility: this.state.httpUtility })
+                    ),
+                    React.createElement(
+                        Route,
+                        { path: '/ingredients' },
+                        React.createElement(IngredientsPage, { httpUtility: this.state.httpUtility })
                     ),
                     React.createElement(
                         Route,

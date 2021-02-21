@@ -14,6 +14,7 @@ export var ArticleViewer = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (ArticleViewer.__proto__ || Object.getPrototypeOf(ArticleViewer)).call(this, props));
 
+        _this.loadArticleFromUrl = _this.loadArticleFromUrl.bind(_this);
         _this.showArticle = _this.showArticle.bind(_this);
         _this.createArticleElement = _this.createArticleElement.bind(_this);
 
@@ -26,6 +27,16 @@ export var ArticleViewer = function (_React$Component) {
     _createClass(ArticleViewer, [{
         key: "componentDidMount",
         value: function componentDidMount() {
+            var _this2 = this;
+
+            this.loadArticleFromUrl(true);
+            window.onpopstate = function () {
+                return _this2.loadArticleFromUrl(false);
+            };
+        }
+    }, {
+        key: "loadArticleFromUrl",
+        value: function loadArticleFromUrl(addToHistory) {
             var urlParts = window.location.href.trimEnd('/').split('/').filter(function (p) {
                 return p && p.length > 0;
             });
@@ -45,19 +56,29 @@ export var ArticleViewer = function (_React$Component) {
             });
             if (article) {
                 this.setState({ currentArticleTitle: article.title });
-                this.showArticle(article, jumpTo);
+                this.showArticle(article, jumpTo, addToHistory);
+            } else if (window.innerWidth < 1200) {
+                this.setState({ currentArticleTitle: null });
             } else {
                 this.setState({ currentArticleTitle: this.state.articles[0].title });
-                this.showArticle(this.state.articles[0]);
+                this.showArticle(this.state.articles[0], null, addToHistory);
             }
         }
     }, {
         key: "showArticle",
-        value: function showArticle(e, jumpTo) {
+        value: function showArticle(e, jumpTo, addToHistory) {
+            var _this3 = this;
 
             this.state.httpUtility.get("/articles/" + e.file + ".md").then(function (text) {
+
+                _this3.setState({ currentArticleTitle: e.title });
+
+                document.title = "Pantrymo - " + e.title;
+
                 var html = marked(text);
-                history.pushState(e, e.title, "/articles/" + e.file);
+
+                if (addToHistory) history.pushState(e, e.title, "/articles/" + e.file);
+
                 document.getElementById('articleTitle').innerHTML = e.title;
                 document.getElementById('articleBody').innerHTML = html;
 
@@ -72,13 +93,13 @@ export var ArticleViewer = function (_React$Component) {
     }, {
         key: "createArticleElement",
         value: function createArticleElement(article) {
-            var _this2 = this;
+            var _this4 = this;
 
             var selected = article.title == this.state.currentArticleTitle ? "selected" : "";
             return React.createElement(
                 "li",
                 { className: selected, onClick: function onClick() {
-                        return _this2.showArticle(article);
+                        return _this4.showArticle(article, null, true);
                     }, key: article.title },
                 React.createElement(
                     "span",
@@ -98,6 +119,16 @@ export var ArticleViewer = function (_React$Component) {
         value: function render() {
             var articleList = this.state.articles.map(this.createArticleElement);
 
+            var body = "";
+            if (this.state.currentArticleTitle) {
+                body = React.createElement(
+                    "section",
+                    { id: "articleBodyContainer" },
+                    React.createElement("h1", { id: "articleTitle" }),
+                    React.createElement("article", { id: "articleBody" })
+                );
+            }
+
             return React.createElement(
                 "section",
                 { className: "whiteBox articlePage" },
@@ -106,12 +137,7 @@ export var ArticleViewer = function (_React$Component) {
                     { className: "articleList" },
                     articleList
                 ),
-                React.createElement(
-                    "section",
-                    { id: "articleBodyContainer" },
-                    React.createElement("h1", { id: "articleTitle" }),
-                    React.createElement("article", { id: "articleBody" })
-                )
+                body
             );
         }
     }]);

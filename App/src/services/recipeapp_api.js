@@ -12,7 +12,13 @@ export class RecipeAppApi
     {
         var ingredientsCSV = ingredients.join(",");
         return this.httpUtility.getJson(`https://${settings.host}/api/Cuisines/ByIngredients?ingredients=${ingredientsCSV}`, this.validResult)
-        .catch(this.showErrorInConsole);
+            .catch(this.showErrorInConsole);
+    }
+
+    rankIngredientsByCuisine(cuisine)
+    {
+        return this.httpUtility.getJson(`https://${settings.host}/api/Ingredient/RankForCuisine?cuisineName=${cuisine}`, ()=>true)
+            .catch(this.showErrorInConsole);
     }
 
     recipeSearch(query, selectedCuisines, page)

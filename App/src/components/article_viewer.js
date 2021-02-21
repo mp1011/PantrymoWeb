@@ -3,6 +3,8 @@ export class ArticleViewer extends React.Component
     constructor(props) 
     {
       super(props);   
+
+      this.loadArticleFromUrl = this.loadArticleFromUrl.bind(this);
       this.showArticle = this.showArticle.bind(this);
       this.createArticleElement = this.createArticleElement.bind(this);
 
@@ -18,7 +20,13 @@ export class ArticleViewer extends React.Component
     }
 
     componentDidMount() 
-    {    
+    {   
+        this.loadArticleFromUrl(true);        
+        window.onpopstate = () => this.loadArticleFromUrl(false);
+    }
+
+    loadArticleFromUrl(addToHistory)
+    {
         let urlParts = window.location.href
             .trimEnd('/')
             .split('/')
@@ -39,23 +47,35 @@ export class ArticleViewer extends React.Component
         if(article)
         {
             this.setState({ currentArticleTitle: article.title});
-            this.showArticle(article, jumpTo);
+            this.showArticle(article, jumpTo, addToHistory);
+        }
+        else if(window.innerWidth < 1200)
+        {
+            this.setState({ currentArticleTitle: null});
         }
         else 
         {
             this.setState({ currentArticleTitle: this.state.articles[0].title});
-            this.showArticle(this.state.articles[0]);
+            this.showArticle(this.state.articles[0], null, addToHistory);
         }
     }
 
 
-    showArticle(e, jumpTo)
+    showArticle(e, jumpTo, addToHistory)
     {
 
         this.state.httpUtility.get(`/articles/${e.file}.md`)
             .then(text=> {
+
+                this.setState({ currentArticleTitle: e.title});
+
+                document.title = `Pantrymo - ${e.title}`;
+
                 let html = marked(text);
-                history.pushState(e, e.title, `/articles/${e.file}`);
+
+                if(addToHistory)
+                    history.pushState(e, e.title, `/articles/${e.file}`);
+
                 document.getElementById('articleTitle').innerHTML = e.title;
                 document.getElementById('articleBody').innerHTML = html;
 
@@ -73,7 +93,7 @@ export class ArticleViewer extends React.Component
     createArticleElement(article)
     {
         var selected = (article.title == this.state.currentArticleTitle) ? "selected" : "";
-        return <li className={selected} onClick={()=> this.showArticle(article)} key={article.title}>
+        return <li className={selected} onClick={()=> this.showArticle(article,null,true)} key={article.title}>
                     <span>{article.title}</span> <span className="date">{article.published}</span>
                 </li>;
     }
@@ -82,14 +102,18 @@ export class ArticleViewer extends React.Component
     {
         let articleList = this.state.articles.map(this.createArticleElement);
 
+        var body = "";
+        if(this.state.currentArticleTitle)
+        {
+            body = <section id='articleBodyContainer'>
+                <h1 id='articleTitle'></h1>
+                <article id='articleBody'></article>
+                </section>;
+        }
+
         return  <section className="whiteBox articlePage">
                     <ul className="articleList">{articleList}</ul> 
-        
-                    <section id='articleBodyContainer'>
-                        <h1 id='articleTitle'></h1>
-                        <article id='articleBody'></article>
-                    </section>
-                    
+                    {body}     
                 </section>
     }
 }

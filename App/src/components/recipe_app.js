@@ -68,16 +68,10 @@ export class RecipeApp extends React.Component
     }
 
     updateCuisines(ingredients)
-    {
+    {  
       this.state.recipeAppApi.getCuisinesByIngredients(ingredients)
-      .then(cuisineNames => {
-
-          let cuisines = this.state.cuisines;
-          let orderedCuisines = cuisineNames.map(c=>{
-            return cuisines.find(p=>p.name == c);
-          })
-
-          this.setState({cuisines: orderedCuisines});
+      .then(rankedCuisines => {
+          this.setState({rankedCuisines: rankedCuisines});
       });
     }
 
@@ -251,6 +245,8 @@ export class RecipeApp extends React.Component
     componentDidMount() 
     {    
         this.prepareSite();
+
+        window.onpopstate = () => this.setInitialState();
         window.addEventListener('scroll', this.onScroll);
     }
 
@@ -298,7 +294,8 @@ export class RecipeApp extends React.Component
 
         if(initialState.selectedIngredients.length > 0)
         {
-          this.updateRecipes(initialState.selectedIngredients, false);
+            this.updateRecipes(initialState.selectedIngredients, false);
+            this.updateCuisines(initialState.selectedIngredients);
         }
     }
 
@@ -385,7 +382,7 @@ export class RecipeApp extends React.Component
                 <SelectedIngredientsPanel selectedIngredients={this.state.selectedIngredients} onIngredientRemoved={this.onIngredientRemoved} />
               </section>           
 
-              <CuisinePicker cuisines={this.state.cuisines} onCuisineToggled={this.onCuisineToggled} />         
+              <CuisinePicker cuisines={this.state.cuisines} rankedCuisines={this.state.rankedCuisines} onCuisineToggled={this.onCuisineToggled} />         
                  
               <BackToTopPanel />
               <RecipesList loading={this.state.loadingRecipes} recipes={this.state.recipes} selectedIngredients={this.state.selectedIngredients} debug={this.state.debug} />
