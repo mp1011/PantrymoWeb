@@ -170,7 +170,7 @@ nav li a
 
 nav .active
 {    
-    font-size:1.4rem;
+    font-size:1.2rem;
 }
 
 body 
@@ -546,9 +546,21 @@ ul.articleList li:not(:last-child)
 
 footer
 {
+    position:relative;
+    background-color: rgb(204, 226, 178);
+    border:solid 1px rgb(37, 44, 28);
     font-size:smaller;
     margin-left:1rem;
+    margin-right:1rem;
+    padding:0.2rem;
     color:black;
+}
+
+#edamam-badge
+{
+    position:absolute;
+    right:0;
+    top:0;
 }
 
 .backToTopPanel

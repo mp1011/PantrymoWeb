@@ -64,7 +64,7 @@ export var Shell = function (_React$Component) {
                                 React.createElement(
                                     NavLink,
                                     { activeClassName: 'active', exact: true, to: '/' },
-                                    'Recipe Search'
+                                    'Recipes'
                                 )
                             ),
                             React.createElement(

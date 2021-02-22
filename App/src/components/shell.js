@@ -36,7 +36,7 @@ export class Shell extends React.Component
                 <nav>
                     <ul>
                         <li>
-                            <NavLink activeClassName='active' exact={true} to="/">Recipe Search</NavLink>
+                            <NavLink activeClassName='active' exact={true} to="/">Recipes</NavLink>
                         </li>
                         <li>
                             <NavLink activeClassName='active' to="/articles">Articles</NavLink>
