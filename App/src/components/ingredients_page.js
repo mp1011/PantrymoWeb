@@ -63,10 +63,10 @@ export class IngredientsPage extends React.Component
         if(this.state.rankedIngredients)
         {
             var list = this.state.rankedIngredients.rankedChildren
-                    .map(c=> <IngredientTree key={c.name} ingredients={c} selectedCuisine={this.state.selectedCuisine} />);
+                    .map(c=> <IngredientTree key={c.name} ingredients={c} selectedCuisine={this.state.selectedCuisine} depth={1} />);
 
             tree=<section id="ingredientsTreeContainer">
-                <ul className="whiteBox ingredientsTree">{list}</ul>
+                <ul className="ingredientsTree">{list}</ul>
             </section>
         }
 
@@ -102,7 +102,7 @@ export class IngredientTree extends React.Component
 
     shouldHide(item, thisIndex, totalCount)
     {
-        let maxItemsPerNode=4;
+        let maxItemsPerNode= this.props.depth == 1 ? 4 : 2;
 
         if(thisIndex < maxItemsPerNode)
             return false;
@@ -140,18 +140,22 @@ export class IngredientTree extends React.Component
         {
             var itemCount=this.props.ingredients.rankedChildren.length;
             var childElements = this.props.ingredients.rankedChildren
-                .map((c,ix) => <IngredientTree key={c.name} shouldHide={this.shouldHide(c,ix,itemCount)} ingredients={c} selectedCuisine={this.props.selectedCuisine} />);
+                .map((c,ix) => <IngredientTree key={c.name} 
+                                shouldHide={this.shouldHide(c,ix,itemCount)} 
+                                ingredients={c} 
+                                selectedCuisine={this.props.selectedCuisine}
+                                depth={this.props.depth+1} />);
 
             if(childElements.some(p=>p.props.shouldHide))
-                childElements.push(<li key="showMore"><input type='button' value='&#9660; Show more...' className='showMoreIngredients' onClick={this.showMoreButtonClicked} /></li>)
+                childElements.push(<li key="showMore" className='showMoreContainer'><input type='button' value='&#9660; Show more...' className='showMoreIngredients' onClick={this.showMoreButtonClicked} /></li>)
 
             innerList = <ul>{childElements}</ul>;
         }
 
-        return <li style={displayStyle}>
+        return <li className={colorClass} style={displayStyle}>
                  <a href={`/#ingredients=${this.props.ingredients.name}&cuisines=${this.props.selectedCuisine}`} className="ingredientName">
                      {this.props.ingredients.name}
-                     <section className={"percent " + colorClass}>{percent}</section>
+                     <section className={"percent " + colorClass}>({percent})</section>
                  </a>
                  
                  {innerList}

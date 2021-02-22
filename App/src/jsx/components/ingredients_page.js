@@ -74,7 +74,7 @@ export var IngredientsPage = function (_React$Component) {
 
             if (this.state.rankedIngredients) {
                 var list = this.state.rankedIngredients.rankedChildren.map(function (c) {
-                    return React.createElement(IngredientTree, { key: c.name, ingredients: c, selectedCuisine: _this4.state.selectedCuisine });
+                    return React.createElement(IngredientTree, { key: c.name, ingredients: c, selectedCuisine: _this4.state.selectedCuisine, depth: 1 });
                 });
 
                 tree = React.createElement(
@@ -82,7 +82,7 @@ export var IngredientsPage = function (_React$Component) {
                     { id: 'ingredientsTreeContainer' },
                     React.createElement(
                         'ul',
-                        { className: 'whiteBox ingredientsTree' },
+                        { className: 'ingredientsTree' },
                         list
                     )
                 );
@@ -149,7 +149,7 @@ export var IngredientTree = function (_React$Component2) {
     }, {
         key: 'shouldHide',
         value: function shouldHide(item, thisIndex, totalCount) {
-            var maxItemsPerNode = 4;
+            var maxItemsPerNode = this.props.depth == 1 ? 4 : 2;
 
             if (thisIndex < maxItemsPerNode) return false;
 
@@ -178,14 +178,18 @@ export var IngredientTree = function (_React$Component2) {
             if (this.props.ingredients.rankedChildren.length > 0) {
                 var itemCount = this.props.ingredients.rankedChildren.length;
                 var childElements = this.props.ingredients.rankedChildren.map(function (c, ix) {
-                    return React.createElement(IngredientTree, { key: c.name, shouldHide: _this6.shouldHide(c, ix, itemCount), ingredients: c, selectedCuisine: _this6.props.selectedCuisine });
+                    return React.createElement(IngredientTree, { key: c.name,
+                        shouldHide: _this6.shouldHide(c, ix, itemCount),
+                        ingredients: c,
+                        selectedCuisine: _this6.props.selectedCuisine,
+                        depth: _this6.props.depth + 1 });
                 });
 
                 if (childElements.some(function (p) {
                     return p.props.shouldHide;
                 })) childElements.push(React.createElement(
                     'li',
-                    { key: 'showMore' },
+                    { key: 'showMore', className: 'showMoreContainer' },
                     React.createElement('input', { type: 'button', value: '\u25BC Show more...', className: 'showMoreIngredients', onClick: this.showMoreButtonClicked })
                 ));
 
@@ -198,7 +202,7 @@ export var IngredientTree = function (_React$Component2) {
 
             return React.createElement(
                 'li',
-                { style: displayStyle },
+                { className: colorClass, style: displayStyle },
                 React.createElement(
                     'a',
                     { href: '/#ingredients=' + this.props.ingredients.name + '&cuisines=' + this.props.selectedCuisine, className: 'ingredientName' },
@@ -206,7 +210,9 @@ export var IngredientTree = function (_React$Component2) {
                     React.createElement(
                         'section',
                         { className: "percent " + colorClass },
-                        percent
+                        '(',
+                        percent,
+                        ')'
                     )
                 ),
                 innerList

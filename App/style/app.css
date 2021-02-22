@@ -671,8 +671,10 @@ footer
 
 #ingredientsTreeContainer 
 {
-    width:100%;
     white-space: normal;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    box-sizing: border-box;
 }
 
 #ingredientsTreeContainer  ul 
@@ -686,18 +688,19 @@ footer
     font-family: 'Ebrima';
     text-transform: capitalize;
     white-space: nowrap;
+    box-sizing: border-box;
 }
 
 #ingredientsTreeContainer>ul
 {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    grid-auto-flow: column row;
+    grid-auto-flow: column row dense;
 }
 
 #ingredientsTreeContainer li 
 {
-    padding-left:1.8rem;
+    padding-left:1rem;
     font-size:0.9em;
 }
 
@@ -719,25 +722,13 @@ footer
     }
 }
 
-
-.ingredientsTree .ingredientName
-{
-    display:inline-block;
-    padding-bottom: 0.8rem;
-}
-
-.ingredientsTree .ingredientName:hover
-{
-    background-color: rgb(186, 221, 186);
-}
-
-.ingredientsTree .ingredientName .percent 
+.ingredientsTree li
 {
     border-radius: 20px;
-    color:white;
     font-weight: bold;
-    padding: 0 10px 0 10px;
-    margin-left:1rem;
+    padding-right: 1rem;
+    margin-bottom: 1rem;
+    box-sizing: border-box;
 }
 
 .ingredientsTree .showMoreIngredients
@@ -751,35 +742,60 @@ footer
     padding-bottom: 1rem;
 }
 
-.ingredientsTree .ingredientName .percent.green
+.ingredientsTree li.hide
 {
     border-top:solid 2px rgb(12, 87, 2);
     border-left:solid 2px rgb(27, 95, 25);
     border-bottom:solid 2px rgb(1, 46, 16); 
     border-right:solid 2px rgb(10, 39, 5);
-    background-color: rgb(193, 253, 203);
     color:darkgreen;
-   
+    background-color: rgb(204, 226, 178);
 }
 
-.ingredientsTree .ingredientName .percent.yellow
+.ingredientsTree li.green
+{
+    border-top:solid 2px rgb(12, 87, 2);
+    border-left:solid 2px rgb(27, 95, 25);
+    border-bottom:solid 2px rgb(1, 46, 16); 
+    border-right:solid 2px rgb(10, 39, 5);
+    color:darkgreen;
+    background-color: rgb(204, 226, 178);
+}
+
+.ingredientsTree li.yellow
 {
     border-top:solid 2px rgb(94, 88, 16);
     border-left:solid 2px rgb(110, 105, 30);
     border-bottom:solid 2px rgb(49, 46, 5); 
-    border-right:solid 2px rgb(49, 46, 5);
-    background-color: rgb(235, 245, 146);
+    border-right:solid 2px rgb(49, 46, 5);    
     color:rgb(133, 98, 32);
+    background-color: rgb(204, 226, 178);
 }
 
-.ingredientsTree .ingredientName .percent.orange
+.ingredientsTree li.orange
 {
     border-top:solid 2px rgb(94, 88, 16);
     border-left:solid 2px rgb(110, 105, 30);
     border-bottom:solid 2px rgb(49, 46, 5); 
     border-right:solid 2px rgb(49, 46, 5);
-    background-color: rgb(255, 200, 155);
-    color:rgb(133, 106, 32);
+    color:rgb(133, 98, 32);
+    background-color: rgb(204, 226, 178);
+}
+
+
+.ingredientsTree li.green
+{
+    box-shadow: 0px 0px 4px 0 rgb(62, 112, 22) inset;   
+}
+
+.ingredientsTree li.yellow
+{
+    box-shadow: 0px 0px 8px 0 rgb(238, 245, 39) inset; 
+}
+
+.ingredientsTree li.orange
+{
+    box-shadow: 0px 0px 8px 0 rgb(241, 139, 4) inset; 
 }
 
 .ingredientsTree .ingredientName .percent.hide 
