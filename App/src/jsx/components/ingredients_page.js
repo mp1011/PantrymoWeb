@@ -198,7 +198,7 @@ export var IngredientTree = function (_React$Component2) {
                     null,
                     childElements
                 );
-            }
+            } else colorClass += " finalNode";
 
             return React.createElement(
                 'li',

@@ -72,10 +72,10 @@ html
     font-size:45px;
     color:rgb(255, 255, 255);
     text-shadow: 
-        -4px -4px 0 rgb(42, 139, 34),
-        -4px 4px 0 rgb(42, 139, 34),      
-        4px 4px 0 rgb(179, 207, 76),
-        4px -4px 0 rgb(179, 207, 76);
+        -4px -4px 0 rgb(43, 131, 35),
+        -4px 4px 0 rgb(63, 134, 57),      
+        4px 4px 0 rgb(188, 230, 38),
+        4px -4px 0 rgb(175, 228, 31);
         
 }
 
@@ -170,7 +170,8 @@ nav li a
 
 nav .active
 {    
-    font-size:1.2rem;
+    transition: font-size 100ms ease-in;
+    font-size: 1.2rem;    
 }
 
 body 
@@ -216,10 +217,14 @@ ul.articleList li
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
     cursor: pointer;
+
+    transition: font-size 100ms ease-in;
+    font-size:1.0rem;
 }
 
 ul.articleList li:hover 
 {
+    transition: font-size 100ms ease-in;
     font-size:1.2rem;
 }
 
@@ -401,6 +406,8 @@ ul.articleList li:not(:last-child)
     list-style-type: none;
     flex-wrap: wrap;
     align-content: space-between;
+    justify-content:left;
+    align-content: space-around;
 }
 
 .cuisineList li 
@@ -417,8 +424,9 @@ ul.articleList li:not(:last-child)
     border-right: solid 2px rgb(75, 75, 85);
     border-left: solid 2px rgb(127, 127, 175);
     border-bottom: solid 2px rgb(71, 71, 83);
-    padding:0.4rem 1rem 0.4rem 1rem;
+    padding:0.4rem 0.5rem 0.4rem 0.5rem;
     font-family: 'Ebrima';
+    outline-width: 0;
 }
 
 .cuisineList li.topMatch input
@@ -695,7 +703,11 @@ footer
 {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    grid-auto-flow: column row dense;
+    grid-template-rows: masonry;
+    grid-auto-flow: column row dense; 
+   /* display: flex;
+    flex-flow: column wrap;
+    max-width: 100%;*/
 }
 
 #ingredientsTreeContainer li 
@@ -704,10 +716,15 @@ footer
     font-size:0.9em;
 }
 
+#ingredientsTreeContainer li.finalNode
+{
+    padding-left: 0.5rem;
+}
+
 #ingredientsTreeContainer>ul>li 
 {
     display:block;
-    width:100%;
+    width:25%;
     font-size:1.2rem;
 }
 
@@ -730,6 +747,8 @@ footer
     margin-bottom: 1rem;
     box-sizing: border-box;
 }
+
+
 
 .ingredientsTree .showMoreIngredients
 {
@@ -801,4 +820,9 @@ footer
 .ingredientsTree .ingredientName .percent.hide 
 { 
     display:none;
+}
+
+.ingredientsTree li .finalNode:hover 
+{
+    background-color: rgb(231, 252, 128);
 }

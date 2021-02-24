@@ -151,6 +151,8 @@ export class IngredientTree extends React.Component
 
             innerList = <ul>{childElements}</ul>;
         }
+        else         
+            colorClass += " finalNode";
 
         return <li className={colorClass} style={displayStyle}>
                  <a href={`/#ingredients=${this.props.ingredients.name}&cuisines=${this.props.selectedCuisine}`} className="ingredientName">

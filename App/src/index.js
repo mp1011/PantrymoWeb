@@ -7,6 +7,7 @@ import '/src/services/group.js'
 function startApp()
 {
     let emailElement = document.getElementById('email');
+    emailElement.href = `mailto: ${settings.email}`;
     emailElement.innerText = settings.email;
 
     // eslint-disable-next-line no-undef
