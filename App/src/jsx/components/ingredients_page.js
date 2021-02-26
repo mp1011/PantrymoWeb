@@ -23,7 +23,10 @@ export var IngredientsPage = function (_React$Component) {
         var httpUtility = props.httpUtility;
         var recipeAppApi = new RecipeAppApi(httpUtility);
         _this.onCuisineToggled = _this.onCuisineToggled.bind(_this);
-
+        _this.alignRows = _this.alignRows.bind(_this);
+        _this.onResize = _this.onResize.bind(_this);
+        _this.layoutItems = _this.layoutItems.bind(_this);
+        _this.onLayoutChanged = _this.onLayoutChanged.bind(_this);
         _this.state = {
             httpUtility: httpUtility,
             recipeAppApi: recipeAppApi
@@ -32,9 +35,57 @@ export var IngredientsPage = function (_React$Component) {
     }
 
     _createClass(IngredientsPage, [{
+        key: 'alignRows',
+        value: function alignRows(upperRow, lowerRow) {
+            var column = 0;
+
+            while (column < upperRow.length && column < lowerRow.length) {
+                var upperItem = upperRow[column];
+                var lowerItem = lowerRow[column];
+
+                var upperPos = upperItem.getBoundingClientRect();
+                var lowerPos = lowerItem.getBoundingClientRect();
+
+                var gap = lowerPos.y - (upperPos.y + upperPos.height) - 16;
+                if (gap > 0) lowerItem.style.top = '-' + gap + 'px';
+
+                column++;
+            }
+        }
+    }, {
+        key: 'onResize',
+        value: function onResize() {
+            this.layoutItems();
+        }
+    }, {
+        key: 'layoutItems',
+        value: function layoutItems() {
+            var nodes = [].slice.call(document.getElementsByClassName("topNode"));
+            nodes.forEach(function (n) {
+                n.style.top = null;
+            });
+
+            var rows = nodes.groupBy(function (n) {
+                return n.getBoundingClientRect().y;
+            }).getValues();
+
+            if (rows.length > 1) this.alignRows(rows[0], rows[1]);
+
+            if (rows.length > 2) this.alignRows(rows[1], rows[2]);
+
+            if (rows.length > 3) this.alignRows(rows[2], rows[3]);
+        }
+    }, {
+        key: 'onLayoutChanged',
+        value: function onLayoutChanged() {
+            setTimeout(this.layoutItems, 0);
+        }
+    }, {
         key: 'componentDidMount',
         value: function componentDidMount() {
             var _this2 = this;
+
+            window.addEventListener('resize', this.onResize);
 
             this.state.recipeAppApi.getCuisineNames().catch(function (e) {
                 console.log(e);
@@ -46,6 +97,16 @@ export var IngredientsPage = function (_React$Component) {
                     _this2.setState({ cuisines: cuisines });
                 }
             });
+        }
+    }, {
+        key: 'componentDidUpdate',
+        value: function componentDidUpdate() {
+            this.layoutItems();
+        }
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+            window.removeEventListener('resize', this.onResize);
         }
     }, {
         key: 'onCuisineToggled',
@@ -70,11 +131,45 @@ export var IngredientsPage = function (_React$Component) {
 
             if (!this.state.cuisines) return "";
 
+            var ingredientsTreeMain = document.getElementById("ingredientsTreeMain");
+            if (ingredientsTreeMain) {
+                ingredientsTreeMain.style.height = "inherit";
+                var padding = [].slice.call(document.getElementsByClassName("ingredientTreePadding"));
+                var _iteratorNormalCompletion = true;
+                var _didIteratorError = false;
+                var _iteratorError = undefined;
+
+                try {
+                    for (var _iterator = padding[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                        var item = _step.value;
+
+                        item.parentNode.removeChild(item);
+                    }
+                } catch (err) {
+                    _didIteratorError = true;
+                    _iteratorError = err;
+                } finally {
+                    try {
+                        if (!_iteratorNormalCompletion && _iterator.return) {
+                            _iterator.return();
+                        }
+                    } finally {
+                        if (_didIteratorError) {
+                            throw _iteratorError;
+                        }
+                    }
+                }
+            }
+
             var tree = "";
 
             if (this.state.rankedIngredients) {
                 var list = this.state.rankedIngredients.rankedChildren.map(function (c) {
-                    return React.createElement(IngredientTree, { key: c.name, ingredients: c, selectedCuisine: _this4.state.selectedCuisine, depth: 1 });
+                    return React.createElement(IngredientTree, { key: c.name,
+                        ingredients: c,
+                        selectedCuisine: _this4.state.selectedCuisine,
+                        onLayoutChanged: _this4.onLayoutChanged,
+                        depth: 1 });
                 });
 
                 tree = React.createElement(
@@ -82,7 +177,7 @@ export var IngredientsPage = function (_React$Component) {
                     { id: 'ingredientsTreeContainer' },
                     React.createElement(
                         'ul',
-                        { className: 'ingredientsTree' },
+                        { id: 'ingredientsTreeMain', className: 'ingredientsTree' },
                         list
                     )
                 );
@@ -119,32 +214,33 @@ export var IngredientTree = function (_React$Component2) {
             var parentList = e.target.parentElement.parentElement;
 
             var listItems = parentList.getElementsByTagName("li");
-            var _iteratorNormalCompletion = true;
-            var _didIteratorError = false;
-            var _iteratorError = undefined;
+            var _iteratorNormalCompletion2 = true;
+            var _didIteratorError2 = false;
+            var _iteratorError2 = undefined;
 
             try {
-                for (var _iterator = listItems[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                    var item = _step.value;
+                for (var _iterator2 = listItems[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                    var item = _step2.value;
 
                     item.style["display"] = "inherit";
                 }
             } catch (err) {
-                _didIteratorError = true;
-                _iteratorError = err;
+                _didIteratorError2 = true;
+                _iteratorError2 = err;
             } finally {
                 try {
-                    if (!_iteratorNormalCompletion && _iterator.return) {
-                        _iterator.return();
+                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                        _iterator2.return();
                     }
                 } finally {
-                    if (_didIteratorError) {
-                        throw _iteratorError;
+                    if (_didIteratorError2) {
+                        throw _iteratorError2;
                     }
                 }
             }
 
             e.target.style.display = "none";
+            this.props.onLayoutChanged();
         }
     }, {
         key: 'shouldHide',
@@ -167,6 +263,8 @@ export var IngredientTree = function (_React$Component2) {
 
             if (this.props.shouldHide) {
                 displayStyle = { display: 'none' };
+            } else {
+                displayStyle = { order: this.props.column };
             }
 
             var innerList = "";
@@ -182,6 +280,7 @@ export var IngredientTree = function (_React$Component2) {
                         shouldHide: _this6.shouldHide(c, ix, itemCount),
                         ingredients: c,
                         selectedCuisine: _this6.props.selectedCuisine,
+                        onLayoutChanged: _this6.props.onLayoutChanged,
                         depth: _this6.props.depth + 1 });
                 });
 
@@ -200,6 +299,8 @@ export var IngredientTree = function (_React$Component2) {
                 );
             } else colorClass += " finalNode";
 
+            if (this.props.depth == 1) colorClass += " topNode";
+
             return React.createElement(
                 'li',
                 { className: colorClass, style: displayStyle },
@@ -209,7 +310,7 @@ export var IngredientTree = function (_React$Component2) {
                     this.props.ingredients.name,
                     React.createElement(
                         'section',
-                        { className: "percent " + colorClass },
+                        { className: "percent" },
                         '(',
                         percent,
                         ')'

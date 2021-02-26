@@ -701,13 +701,7 @@ footer
 
 #ingredientsTreeContainer>ul
 {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    grid-template-rows: masonry;
-    grid-auto-flow: column row dense; 
-   /* display: flex;
-    flex-flow: column wrap;
-    max-width: 100%;*/
+    display: block;
 }
 
 #ingredientsTreeContainer li 
@@ -724,14 +718,24 @@ footer
 #ingredientsTreeContainer>ul>li 
 {
     display:block;
-    width:25%;
     font-size:1.2rem;
+    width:100%;
 }
 
 @media(min-width:1200px)
 {
+    #ingredientsTreeContainer>ul
+    {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        grid-template-rows: masonry;
+        grid-auto-flow: column row dense;
+        align-items: flex-start;
+    }
+
     #ingredientsTreeContainer>ul>li 
     {
+        position:relative;
         display:inline-block;
         width:auto;
         margin-right: 1rem;
@@ -817,7 +821,7 @@ footer
     box-shadow: 0px 0px 8px 0 rgb(241, 139, 4) inset; 
 }
 
-.ingredientsTree .ingredientName .percent.hide 
+.ingredientsTree li.hide .ingredientName .percent
 { 
     display:none;
 }

@@ -14,15 +14,73 @@ export class IngredientsPage extends React.Component
       var httpUtility = props.httpUtility;
       var recipeAppApi = new RecipeAppApi(httpUtility);
       this.onCuisineToggled = this.onCuisineToggled.bind(this);
-
+      this.alignRows = this.alignRows.bind(this);
+      this.onResize = this.onResize.bind(this);
+      this.layoutItems = this.layoutItems.bind(this);
+      this.onLayoutChanged = this.onLayoutChanged.bind(this);
       this.state = {
                       httpUtility: httpUtility,
                       recipeAppApi: recipeAppApi
                    };
     }
 
+
+    alignRows(upperRow, lowerRow)
+    {
+        let column = 0;
+
+        while(column < upperRow.length && column < lowerRow.length)
+        {
+            let upperItem = upperRow[column];
+            let lowerItem = lowerRow[column];
+
+            let upperPos = upperItem.getBoundingClientRect();
+            let lowerPos = lowerItem.getBoundingClientRect();
+
+             let gap = lowerPos.y - (upperPos.y + upperPos.height) -16;
+             if(gap > 0)
+                lowerItem.style.top = `-${gap}px`;                
+  
+            column++;
+        }
+    }
+
+    onResize()
+    {
+        this.layoutItems();
+    }
+
+    layoutItems()
+    {
+        let nodes = [].slice.call(document.getElementsByClassName("topNode"));
+        nodes.forEach(n=>
+        {
+            n.style.top = null;
+        });
+
+        var rows = nodes 
+                    .groupBy(n=>n.getBoundingClientRect().y)
+                    .getValues();
+
+        if(rows.length > 1)
+            this.alignRows(rows[0], rows[1]);
+
+        if(rows.length > 2)
+            this.alignRows(rows[1], rows[2]);
+        
+        if(rows.length > 3)
+            this.alignRows(rows[2], rows[3]); 
+    }
+
+    onLayoutChanged()
+    {
+        setTimeout(this.layoutItems,0);
+    }
+
     componentDidMount()
     {
+        window.addEventListener('resize', this.onResize);
+
         this.state.recipeAppApi.getCuisineNames()
             .catch(e=>{
             console.log(e);
@@ -35,6 +93,17 @@ export class IngredientsPage extends React.Component
                     this.setState({ cuisines: cuisines });
                 }
             });
+    }
+
+    
+    componentDidUpdate()
+    {
+        this.layoutItems();
+    }
+
+    componentWillUnmount()
+    {
+        window.removeEventListener('resize', this.onResize);
     }
 
     onCuisineToggled(cuisine)
@@ -58,15 +127,29 @@ export class IngredientsPage extends React.Component
         if(!this.state.cuisines)
             return "";
 
+        let ingredientsTreeMain = document.getElementById("ingredientsTreeMain");
+        if(ingredientsTreeMain)
+        {
+            ingredientsTreeMain.style.height = "inherit";            
+            var padding = [].slice.call(document.getElementsByClassName("ingredientTreePadding"));
+            for (let item of padding) {
+                item.parentNode.removeChild(item);
+            }
+        }
+
         var tree="";
 
         if(this.state.rankedIngredients)
         {
             var list = this.state.rankedIngredients.rankedChildren
-                    .map(c=> <IngredientTree key={c.name} ingredients={c} selectedCuisine={this.state.selectedCuisine} depth={1} />);
+                    .map( c => <IngredientTree  key={c.name} 
+                                                ingredients={c} 
+                                                selectedCuisine={this.state.selectedCuisine}
+                                                onLayoutChanged={this.onLayoutChanged} 
+                                                depth={1} />);
 
             tree=<section id="ingredientsTreeContainer">
-                <ul className="ingredientsTree">{list}</ul>
+                <ul id="ingredientsTreeMain" className="ingredientsTree">{list}</ul>
             </section>
         }
 
@@ -98,6 +181,7 @@ export class IngredientTree extends React.Component
         }
 
         e.target.style.display = "none";
+        this.props.onLayoutChanged();
     }
 
     shouldHide(item, thisIndex, totalCount)
@@ -122,6 +206,10 @@ export class IngredientTree extends React.Component
         {
             displayStyle={display:'none'};
         }
+        else 
+        {
+            displayStyle={order: this.props.column};
+        }
 
         let innerList ="";
         let percent = (this.props.ingredients.frequency * 100).toFixed(0) + "%";
@@ -144,6 +232,7 @@ export class IngredientTree extends React.Component
                                 shouldHide={this.shouldHide(c,ix,itemCount)} 
                                 ingredients={c} 
                                 selectedCuisine={this.props.selectedCuisine}
+                                onLayoutChanged={this.props.onLayoutChanged}
                                 depth={this.props.depth+1} />);
 
             if(childElements.some(p=>p.props.shouldHide))
@@ -154,10 +243,13 @@ export class IngredientTree extends React.Component
         else         
             colorClass += " finalNode";
 
+        if(this.props.depth == 1)
+            colorClass += " topNode";
+
         return <li className={colorClass} style={displayStyle}>
                  <a href={`/#ingredients=${this.props.ingredients.name}&cuisines=${this.props.selectedCuisine}`} className="ingredientName">
                      {this.props.ingredients.name}
-                     <section className={"percent " + colorClass}>({percent})</section>
+                     <section className={"percent"}>({percent})</section>
                  </a>
                  
                  {innerList}
