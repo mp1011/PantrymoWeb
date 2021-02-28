@@ -7,13 +7,23 @@ export class SelectedIngredientsPanel extends React.Component
 
     render() 
     {
-      var list = this.props.selectedIngredients.map((ing)=><SelectedIngredient key={ing} value={ing} onIngredientRemoved={this.props.onIngredientRemoved}/>);
+      let list = this.props.selectedIngredients.map((ing)=><SelectedIngredient key={ing} value={ing} onIngredientRemoved={this.props.onIngredientRemoved}/>);
+      let suffix = "";
+      let label = "What can I make with . . .";
 
-      return (
-          <ul className="ingredientsList">
-            {list}
-          </ul>
-      );
+      if(list.length > 0)
+      {
+          label = "What can I make with ";
+          suffix = <h2 className="suffix">?</h2>
+      }
+
+      return <section>
+                <h2>{label}</h2>
+                <ul className="ingredientsList">
+                  {list}
+                </ul>
+                { suffix }
+            </section>;          
     }
 }
 
@@ -32,8 +42,9 @@ export class SelectedIngredient extends React.Component
 
     render() 
     {
-      return <li className="chosenIngredient" onClick={this.remove}>
-              <input type='button' value={this.props.value} onClick={this.remove}/>
-            </li>
+      return    <li className="chosenIngredient" onClick={this.remove}>
+                  <input type='button' value={this.props.value} onClick={this.remove}/>
+                  <p className="delimiter">&</p>
+                </li>
     }
 }

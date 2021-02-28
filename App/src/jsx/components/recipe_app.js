@@ -398,13 +398,8 @@ export var RecipeApp = function (_React$Component) {
                     React.createElement(
                         'section',
                         { className: 'whiteBox', id: 'ingredientPickerContainer' },
-                        React.createElement(
-                            'h2',
-                            null,
-                            'Tell us what ingredients you have and we\'ll find recipes you can cook!'
-                        ),
-                        React.createElement(IngredientInputBox, { onIngredientAdded: this.onIngredientAdded, recipeAppApi: this.state.recipeAppApi, selectedIngredients: this.state.selectedIngredients }),
-                        React.createElement(SelectedIngredientsPanel, { selectedIngredients: this.state.selectedIngredients, onIngredientRemoved: this.onIngredientRemoved })
+                        React.createElement(SelectedIngredientsPanel, { selectedIngredients: this.state.selectedIngredients, onIngredientRemoved: this.onIngredientRemoved }),
+                        React.createElement(IngredientInputBox, { onIngredientAdded: this.onIngredientAdded, recipeAppApi: this.state.recipeAppApi, selectedIngredients: this.state.selectedIngredients })
                     ),
                     React.createElement(CuisinePicker, { cuisines: this.state.cuisines, rankedCuisines: this.state.rankedCuisines, onCuisineToggled: this.onCuisineToggled }),
                     React.createElement(BackToTopPanel, null),
@@ -414,7 +409,7 @@ export var RecipeApp = function (_React$Component) {
                 return React.createElement(
                     'p',
                     { className: 'notReady' },
-                    'Please wait...'
+                    'Getting ready...'
                 );
             }
         }

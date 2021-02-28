@@ -5,20 +5,22 @@
     <meta name="description" content="Tell us what ingredients you have in your kitchen and we'll suggest recipes for you."/>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/style/app.css"/>
+    <link rel="stylesheet" href="/style/autocomplete.css"/> 
   </head>
   <body>
-    
+
+    <section class="mainTitle">
+      <h1>PANTRYMO</h1>
+    </section>
+
     <div id="root">
-      <section class="mainTitle">
-        <h1>PANTRYMO</h1>
-        <p>Tell us what ingredients you have and we'll find recipes you can cook!</p>
-      </section>
+      
     </div>
     
     <footer>
-      <p>v0.6.1</p>
+      <p>v0.6.2</p>
       <a id='email' className='email text'></a>
-
       <section id="edamam-badge" data-color="transparent"></section>
     </footer>
 
@@ -32,8 +34,6 @@
     <script src="/external/react-router-dom-min.js"></script>
     <script src="/external/marked.min.js"></script>
 
-    <link rel="stylesheet" href="/style/autocomplete.css"/>
-    <link rel="stylesheet" href="/style/app.css"/>
 
     <!-- Load our React component. -->
     <script type="module" src="/src/index.js"></script>
@@ -42,8 +42,10 @@
         document.getElementById("root").innerHTML = "We're sorry, but your browser does not support this website";
         document.getElementById("root").className="unsupportedBrowser";        
     </script>
+
     <noscript>
       <p class='unsupportedBrowser'>Javascript must be enabled to use this website</p>
     </noscript>
+
   </body>
 </html>

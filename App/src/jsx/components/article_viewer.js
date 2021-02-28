@@ -79,7 +79,9 @@ export var ArticleViewer = function (_React$Component) {
 
                 if (addToHistory) history.pushState(e, e.title, "/articles/" + e.file);
 
-                document.getElementById('articleTitle').innerHTML = e.title;
+                var titleElement = document.getElementById('articleTitle');
+                titleElement.innerHTML = e.title;
+
                 document.getElementById('articleBody').innerHTML = html;
 
                 if (jumpTo) {
@@ -87,6 +89,8 @@ export var ArticleViewer = function (_React$Component) {
                         var jumpToElement = document.getElementById(jumpTo);
                         if (jumpToElement) jumpToElement.scrollIntoView();
                     }, 100);
+                } else {
+                    titleElement.scrollIntoView();
                 }
             });
         }

@@ -39,7 +39,7 @@ export var CuisinePicker = function (_React$Component) {
                 for (var _iterator = elements[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                     var item = _step.value;
 
-                    item.style["display"] = "inherit";
+                    item.className += " appear";
                 }
             } catch (err) {
                 _didIteratorError = true;
@@ -64,33 +64,17 @@ export var CuisinePicker = function (_React$Component) {
             var showMoreButton = "";
             var cuisineButtons = [];
             var title = "";
-            var subTitle = "";
 
             if (this.props.isForIngredientsPage) {
                 if (!this.props.cuisines) return "";
 
                 title = "Browse Ingredients by Cuisine";
-                subTitle = React.createElement(
-                    "p",
-                    null,
-                    "Choose a cuisine to see which ingredients appear in the most recipes."
-                );
 
                 cuisineButtons.push(this.props.cuisines.map(function (c) {
                     return _this2.addCuisineButton(c.name, true, false);
                 }));
             } else {
-                title = "Which cuisines do you cook at home?";
-                subTitle = React.createElement(
-                    "p",
-                    null,
-                    React.createElement(
-                        "i",
-                        null,
-                        "(Optional)"
-                    ),
-                    " Choose the cuisines you usually cook and we'll suggest recipes using ingredients common to those cuisines."
-                );
+                title = "Which cuisines do you cook at home? (optional)";
 
                 if (!this.props.rankedCuisines || this.props.rankedCuisines.best.length == 0 && this.props.rankedCuisines.good.length == 0 && this.props.rankedCuisines.other.length == 0) return "";
 
@@ -119,7 +103,6 @@ export var CuisinePicker = function (_React$Component) {
                     null,
                     title
                 ),
-                subTitle,
                 React.createElement(
                     "ul",
                     { className: "cuisineList" },

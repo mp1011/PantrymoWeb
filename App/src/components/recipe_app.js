@@ -377,9 +377,8 @@ export class RecipeApp extends React.Component
             <section>   
 
               <section className="whiteBox" id="ingredientPickerContainer">
-                <h2>Tell us what ingredients you have and we&apos;ll find recipes you can cook!</h2>
-                <IngredientInputBox onIngredientAdded={this.onIngredientAdded} recipeAppApi={this.state.recipeAppApi} selectedIngredients={this.state.selectedIngredients} />
                 <SelectedIngredientsPanel selectedIngredients={this.state.selectedIngredients} onIngredientRemoved={this.onIngredientRemoved} />
+                <IngredientInputBox onIngredientAdded={this.onIngredientAdded} recipeAppApi={this.state.recipeAppApi} selectedIngredients={this.state.selectedIngredients} />
               </section>           
 
               <CuisinePicker cuisines={this.state.cuisines} rankedCuisines={this.state.rankedCuisines} onCuisineToggled={this.onCuisineToggled} />         
@@ -390,7 +389,7 @@ export class RecipeApp extends React.Component
         }
         else 
         {
-            return <p className="notReady">Please wait...</p>
+            return <p className="notReady">Getting ready...</p>
         }      
     }
 }

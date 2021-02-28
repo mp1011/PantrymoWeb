@@ -177,7 +177,11 @@ export class IngredientTree extends React.Component
         var listItems = parentList.getElementsByTagName("li");
         for (let item of listItems) 
         {
-            item.style["display"]  = "inherit";
+            if(item.style["display"] == "none")
+            {
+                item.style["display"] = "inherit";
+                item.className += " appear";
+            }
         }
 
         e.target.style.display = "none";
@@ -186,7 +190,9 @@ export class IngredientTree extends React.Component
 
     shouldHide(item, thisIndex, totalCount)
     {
-        let maxItemsPerNode= this.props.depth == 1 ? 4 : 2;
+        let maxItemsPerNode = this.props.depth == 1 ? 10 : 5;
+        if(window.innerWidth <= 1200)
+            maxItemsPerNode=10000;
 
         if(thisIndex < maxItemsPerNode)
             return false;

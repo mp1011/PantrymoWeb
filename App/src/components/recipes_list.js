@@ -13,6 +13,8 @@ export class RecipesList extends React.Component
          </section>
       </section> : "";
 
+
+
       if(!this.props.loading && this.props.selectedIngredients.length > 0 && this.props.recipes.length == 0)
       {
          return <section className="noResults">
@@ -24,7 +26,7 @@ export class RecipesList extends React.Component
             return <div id="recipeListContainer">         
                <ul className="recipeList">
                   {this.props.recipes.map(r=> <Recipe key={r.url} debug={this.props.debug} selectedIngredients={this.props.selectedIngredients} {...r} />)}
-                  {loader}
+                  {loader}                 
                </ul>
             </div>
 }

@@ -222,7 +222,10 @@ export var IngredientTree = function (_React$Component2) {
                 for (var _iterator2 = listItems[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
                     var item = _step2.value;
 
-                    item.style["display"] = "inherit";
+                    if (item.style["display"] == "none") {
+                        item.style["display"] = "inherit";
+                        item.className += " appear";
+                    }
                 }
             } catch (err) {
                 _didIteratorError2 = true;
@@ -245,7 +248,8 @@ export var IngredientTree = function (_React$Component2) {
     }, {
         key: 'shouldHide',
         value: function shouldHide(item, thisIndex, totalCount) {
-            var maxItemsPerNode = this.props.depth == 1 ? 4 : 2;
+            var maxItemsPerNode = this.props.depth == 1 ? 10 : 5;
+            if (window.innerWidth <= 1200) maxItemsPerNode = 10000;
 
             if (thisIndex < maxItemsPerNode) return false;
 

@@ -46,12 +46,7 @@ export var Shell = function (_React$Component) {
                 null,
                 React.createElement(
                     'section',
-                    { className: 'mainTitle' },
-                    React.createElement(
-                        'h1',
-                        null,
-                        'PANTRYMO'
-                    ),
+                    { className: 'mainNav' },
                     React.createElement(
                         'nav',
                         null,

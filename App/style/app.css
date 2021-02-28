@@ -1,5 +1,5 @@
 @font-face {
-    font-family: "chancery";
+    font-family: "chancery"; /* cursive */
     src: url("/style/chancery.ttf");
   }
 
@@ -13,175 +13,245 @@
     src: url("/style/ebrima.ttf");
   }
 
-@font-face {
-    font-family: "gilsan";
-    src: url("/style/gilsanub.ttf");
+  @font-face 
+  {
+      font-family: "gilsan"; /* BMO font */
+      src: url("/style/gilsanub.ttf");
+  }
+  
+  * 
+  {
+      margin: 0;
+      padding: 0;
+  }
+  
+  html 
+  {
+      scroll-behavior: smooth;
+  }
+  
+  body 
+  {
+      background-color: rgb(2, 19, 6);
+      background-image: url("/style/romanesco.jpg"); 
+      background-attachment: fixed;    
+      background-size: cover;
+  }
+  
+  
+  .mainTitle 
+  {
+      margin: 1rem 0 0 0;
+      padding:0.5rem;
+      display: flex;
+      flex-direction: column;
+  }
+  
+  
+  .mainTitle h1
+  {
+  
+      width:100%;
+      text-align: center;
+      font-family: gilsan, 'Times New Roman', Times, serif, cursive;
+      font-size:45px;
+      color:rgb(255, 255, 255);
+      text-shadow: 
+          -4px -4px 0 rgb(43, 131, 35),
+          -4px 4px 0 rgb(63, 134, 57),      
+          4px 4px 0 rgb(188, 230, 38),
+          4px -4px 0 rgb(175, 228, 31);
+  }
+  
+  p.mainTitle
+  {
+      font-family: georgia, serif;
+      font-size:30px;
+      color:white;
+  }
+  
+  
+  @media(min-width:1200px)
+  {
+      .mainTitle 
+      {
+          justify-content: space-between;
+      }
+  
+      .mainTitle h1
+      {
+          font-size:80px;        
+          animation: 500ms fadein linear;
+      }
+  
+      @keyframes fadein 
+      {
+          from 
+          {
+              font-size:100px;
+              opacity: 0%;
+          }
+  
+          to 
+          {
+              font-size:80px;
+              opacity:100%;    
+          }
+      }
+  }
+  
+  footer
+  {    
+      position:fixed;
+      margin:0;
+      padding: 0.2rem 0 0 0.5rem;
+      bottom: 0;
+      left:0;
+      right:0;
+      height: 2.5rem;
+      background-color: rgb(204, 226, 178);
+      border-top:solid 1px rgb(37, 44, 28);
+      font-size:smaller;
+      color:black;
+  }
+  
+  #edamam-badge
+  {
+      position:absolute;
+      right:0;
+      top:0;
+  }
+  
+  .debug 
+  {
+      display:none;
+  }
+  
+  .unsupportedBrowser 
+  {
+      color:white;
+  }
+  
+  .errorPanel
+  {
+      background:white;
+  }
+  
+  .notReady 
+  {
+      color: black;
+      font-size:20px;
+      text-align: center;
+      padding-top: 1rem;
+      animation: pulse 1s linear infinite;
   }
 
+  @keyframes pulse 
+  {
+      from {
+          font-size:18px
+      }
 
-* {
-    margin: 0;
-    padding: 0;
-    font-family:"Georgia,serif";
-}
+      50% {
+        font-size: 20px;
+      }
+
+      to{
+          font-size: 18px;
+      }
+  }
+  
+  
+  
+  
+  
+  
+  nav 
+  {
+      background-color: rgb(204, 226, 178);
+      background: radial-gradient(circle, rgb(209, 230, 183) 47%, rgb(233, 241, 222) 60%, rgb(216, 223, 207) 87%);
+      border-top: solid 2px rgb(115, 122, 124);
+      border-left: solid 2px rgb(115, 122, 124);
+      border-right: solid 2px rgb(4, 23, 44);
+      border-bottom: solid 2px rgb(4, 23, 44);
+     
+      margin:0rem;
+      padding:0rem;
+      height: 1.8rem;
+      margin-left: auto;
+      margin-right:auto;
+      
+      font-size:1rem;
+  }
+  
+  
+  @media(min-width:1200px)
+  {
+      nav 
+      {
+          width:25%;
+      }
+  }
+  
+  
+  nav ul
+  {
+      display:flex;
+      justify-content: center;
+      list-style-type: none;
+      vertical-align: middle;
+      line-height: 1.8rem;
+      margin-left:0.5rem;
+      margin-right:0.5rem;
+  }
+  
+  nav li 
+  {
+      flex-basis: 1;
+      font-weight: bold;
+      text-align: center;
+      text-decoration: none;
+      color: black;
+      flex-grow: 1;
+  }
+  
+  
+  nav li:hover
+  {
+      text-decoration: underline;
+  }
+  
+  nav li:not(:last-child)
+  {
+      margin-right: 0.3rem;
+      padding-right: 0.2rem;
+      border-right: solid 2px rgb(115, 122, 124);
+  }
+
+  nav li a
+  {
+      color:black;
+      text-decoration: none;
+  }
+  
+  nav .active
+  {    
+      transition: font-size 100ms ease-in;
+      font-size: 1.2rem;    
+  }
+  
+  
+
+
+
 
 a{
     color: black;
 }
 
-html 
-{
-    scroll-behavior: smooth;
-}
-
-.debug 
-{
-    display:none;
-}
-
-.unsupportedBrowser 
-{
-    color:white;
-}
-
-.errorPanel
-{
-    background:white;
-}
-
-.notReady 
-{
-    color: white;
-    font-size:20px;
-}
-
-.mainTitle 
-{
-    margin:1rem;
-    padding:0.5rem;
-    display: flex;
-    flex-direction: column;
-}
-
-.mainTitle h1
-{
-
-    width:100%;
-    text-align: center;
-    font-family: gilsan, 'Times New Roman', Times, serif, cursive;
-    font-size:45px;
-    color:rgb(255, 255, 255);
-    text-shadow: 
-        -4px -4px 0 rgb(43, 131, 35),
-        -4px 4px 0 rgb(63, 134, 57),      
-        4px 4px 0 rgb(188, 230, 38),
-        4px -4px 0 rgb(175, 228, 31);
-        
-}
-
-@media(min-width:1200px)
-{
-    .mainTitle 
-    {
-        justify-content: space-between;
-    }
-
-    .mainTitle h1
-    {
-        font-size:80px;
-    }
-}
 
 
 
-p.mainTitle 
-{
-    font-family: Georgia, serif;
-    font-size:30px;
-    color:white;
-}
-
-nav 
-{
-    background-color: rgb(204, 226, 178);
-    background: radial-gradient(circle, rgb(209, 230, 183) 47%, rgb(233, 241, 222) 60%, rgb(216, 223, 207) 87%);
-    border-top: solid 2px rgb(115, 122, 124);
-    border-left: solid 2px rgb(115, 122, 124);
-    border-right: solid 2px rgb(4, 23, 44);
-    border-bottom: solid 2px rgb(4, 23, 44);
-   
-    margin:0rem;
-    padding:0rem;
-    height: 1.8rem;
-    margin-left: auto;
-    margin-right:auto;
-    
-    font-size:1rem;
-}
-
-
-@media(min-width:1200px)
-{
-    nav 
-    {
-        width:25%;
-    }
-}
-
-
-nav ul
-{
-    display:flex;
-    justify-content: center;
-    list-style-type: none;
-    vertical-align: middle;
-    line-height: 1.8rem;
-    margin-left:0.5rem;
-    margin-right:0.5rem;
-}
-
-nav li 
-{
-    flex-basis: 1;
-    font-weight: bold;
-    text-align: center;
-    text-decoration: none;
-    color: black;
-    flex-grow: 1;
-}
-
-
-nav li:hover
-{
-    text-decoration: underline;
-}
-
-nav li:not(:last-child)
-{
-    margin-right: 0.3rem;
-    padding-right: 0.2rem;
-    border-right: solid 2px rgb(115, 122, 124);
-}
-
-nav li a
-{
-    text-decoration: none;
-}
-
-nav .active
-{    
-    transition: font-size 100ms ease-in;
-    font-size: 1.2rem;    
-}
-
-body 
-{
-    background-color: rgb(2, 19, 6);
-    background-image: url("/style/romanesco.jpg");
-    /*background-image: url("/style/peppers.jpg");*/
-    background-attachment: fixed;    
-    background-size: cover;
-}
 
 .articlePage
 {
@@ -322,12 +392,39 @@ ul.articleList li:not(:last-child)
 {
     color:rgb(29, 0, 0);
     font-size: medium;
-    border-bottom: solid 1px black;
 }
 
 #ingredientPickerContainer h2
 {
     font-size:1.5rem;
+    
+    margin-right: 0.5rem;
+    font-family: 'Georgia';
+}
+
+#ingredientPickerContainer section 
+{
+    display:flex;
+    flex-direction: column;
+    align-items: top;
+}
+
+#ingredientPickerContainer section .suffix 
+{
+    display:none;
+}
+
+@media(min-width:1200px)
+{
+    #ingredientPickerContainer section 
+    {
+        flex-direction: row;
+    }
+
+    #ingredientPickerContainer section .suffix 
+    {
+        display:inherit;
+    }
 }
 
 .recipe h2 
@@ -343,6 +440,7 @@ ul.articleList li:not(:last-child)
     display:flex;
     flex-wrap: wrap;
     justify-content: flex-start;
+    padding-bottom:5rem;
 }
 
 .recipe 
@@ -439,6 +537,29 @@ ul.articleList li:not(:last-child)
     display:none;
 }
 
+.cuisineList li.otherMatch.appear
+{
+    display:inherit;
+    animation: cuisineAppear 300ms linear;
+}
+
+.appear
+{
+    display:inherit;
+    animation: cuisineAppear 300ms linear;
+}
+
+@keyframes cuisineAppear 
+{
+    from{
+        opacity: 0%;
+    }
+
+    to{
+        opacity: 100%;
+    }
+}
+
 .cuisineList input.selected
 {
     background-color: rgb(126, 206, 119);
@@ -462,13 +583,13 @@ ul.articleList li:not(:last-child)
     list-style-type: none;
     flex-wrap: wrap;
     margin:0rem;
+    margin-right:0.5rem;
 }
 
 .ingredientsList li
 {
-    
-    margin-bottom:0.5rem;
-    padding:0.5rem;
+    padding-top: 0.3rem;
+    padding-bottom: 0.3rem;
     font-weight: bold;
 }
 
@@ -507,9 +628,7 @@ ul.articleList li:not(:last-child)
 {
     border-top:solid 1px rgb(31, 73, 15);
     border-bottom:solid 1px rgb(31, 73, 15);
-    border-right:solid 1px rgb(31, 73, 15);    
-    background-color: rgb(160, 238, 129);
-    
+    background-color: rgb(186, 238, 165);   
 }
 
 .chosenIngredient:hover
@@ -520,9 +639,29 @@ ul.articleList li:not(:last-child)
     background-size:28px;
 }
 
+.chosenIngredient .delimiter
+{
+    display:inline;
+    font-weight: bold;
+    color:darkgreen;
+    padding: 0 0.2rem 0 0.2rem
+}
+
 .chosenIngredient:first-child
 {
     border-left:solid 1px rgb(31, 73, 15);
+    padding-left:0.5rem;
+}
+
+.chosenIngredient:last-child
+{    
+    border-right:solid 1px rgb(31, 73, 15);    
+    padding-right:0.5rem;
+}
+
+.chosenIngredient:last-child .delimiter
+{
+    display: none;
 }
 
 .commonIngredient input 
@@ -552,24 +691,6 @@ ul.articleList li:not(:last-child)
     background-color: rgb(182, 133, 133);
 }
 
-footer
-{
-    position:relative;
-    background-color: rgb(204, 226, 178);
-    border:solid 1px rgb(37, 44, 28);
-    font-size:smaller;
-    margin-left:1rem;
-    margin-right:1rem;
-    padding:0.2rem;
-    color:black;
-}
-
-#edamam-badge
-{
-    position:absolute;
-    right:0;
-    top:0;
-}
 
 .backToTopPanel
 {
@@ -616,6 +737,7 @@ footer
     display:inline-block;
     margin:1rem;
     padding:0rem;
+    background-color: rgb(2, 19, 6);
     border-top: solid 5px rgb(218, 121, 121);
     border-left: solid 5px rgb(199, 118, 118);
     border-right: solid 5px rgb(187, 96, 96);
@@ -633,9 +755,16 @@ footer
 
 .noResults 
 {
-    padding: 0rem 0 2rem 2rem;
-    color:white;
+    color:black;
     font-size:1.5rem;
+    background-color: rgb(238, 217, 148);
+    border-top: solid 5px rgb(218, 121, 121);
+    border-left: solid 5px rgb(199, 118, 118);
+    border-right: solid 5px rgb(187, 96, 96);
+    border-bottom: solid 5px rgb(187, 96, 96);
+    margin-left: 1rem;
+    margin-right: 1rem;
+    padding:0.5rem;
 }
 
 .help 
@@ -682,6 +811,7 @@ footer
     white-space: normal;
     margin-left: 1rem;
     margin-right: 1rem;
+    margin-bottom:3rem;
     box-sizing: border-box;
 }
 
@@ -745,13 +875,23 @@ footer
 
 .ingredientsTree li
 {
-    border-radius: 20px;
+    border-radius: 8px;
     font-weight: bold;
-    padding-right: 1rem;
+    padding-right: 0.5rem;
     margin-bottom: 1rem;
     box-sizing: border-box;
+    vertical-align: top;    
 }
 
+#ingredientsTreeContainer>ul>li 
+{
+    border-radius: 20px;
+}
+
+#ingredientsTreeContainer>ul>li>ul>li
+{
+    border-radius: 12px;
+}
 
 
 .ingredientsTree .showMoreIngredients
@@ -769,8 +909,8 @@ footer
 {
     border-top:solid 2px rgb(12, 87, 2);
     border-left:solid 2px rgb(27, 95, 25);
-    border-bottom:solid 2px rgb(1, 46, 16); 
-    border-right:solid 2px rgb(10, 39, 5);
+    border-bottom:solid 2px rgb(1, 46, 16);     
+    border-right:solid 2px rgb(1, 46, 16); 
     color:darkgreen;
     background-color: rgb(204, 226, 178);
 }
@@ -779,8 +919,8 @@ footer
 {
     border-top:solid 2px rgb(12, 87, 2);
     border-left:solid 2px rgb(27, 95, 25);
-    border-bottom:solid 2px rgb(1, 46, 16); 
-    border-right:solid 2px rgb(10, 39, 5);
+    border-bottom:solid 2px rgb(1, 46, 16);     
+    border-right:solid 2px rgb(1, 46, 16); 
     color:darkgreen;
     background-color: rgb(204, 226, 178);
 }
@@ -789,8 +929,8 @@ footer
 {
     border-top:solid 2px rgb(94, 88, 16);
     border-left:solid 2px rgb(110, 105, 30);
-    border-bottom:solid 2px rgb(49, 46, 5); 
-    border-right:solid 2px rgb(49, 46, 5);    
+    border-bottom:solid 2px rgb(49, 46, 5);
+    border-right:solid 2px rgb(49, 46, 5);
     color:rgb(133, 98, 32);
     background-color: rgb(204, 226, 178);
 }
@@ -800,7 +940,7 @@ footer
     border-top:solid 2px rgb(94, 88, 16);
     border-left:solid 2px rgb(110, 105, 30);
     border-bottom:solid 2px rgb(49, 46, 5); 
-    border-right:solid 2px rgb(49, 46, 5);
+    border-right:solid 2px rgb(49, 46, 5); 
     color:rgb(133, 98, 32);
     background-color: rgb(204, 226, 178);
 }
@@ -821,7 +961,13 @@ footer
     box-shadow: 0px 0px 8px 0 rgb(241, 139, 4) inset; 
 }
 
-.ingredientsTree li.hide .ingredientName .percent
+.ingredientsTree .percent
+{
+    font-weight: normal;
+    font-style: italic;
+}
+
+.ingredientsTree li.hide>a>.percent
 { 
     display:none;
 }

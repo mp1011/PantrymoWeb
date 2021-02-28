@@ -37,6 +37,9 @@ export class BackToTopPanel extends React.Component
 
     getScrollToTop()
     {
+        if(window.innerWidth >= 1200)
+            return 0;
+            
         let ingredientPicker = document.getElementById("ingredientPickerContainer");
         if(!ingredientPicker)
             return 0;

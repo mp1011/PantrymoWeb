@@ -45,6 +45,8 @@ export var BackToTopPanel = function (_React$Component) {
     }, {
         key: 'getScrollToTop',
         value: function getScrollToTop() {
+            if (window.innerWidth >= 1200) return 0;
+
             var ingredientPicker = document.getElementById("ingredientPickerContainer");
             if (!ingredientPicker) return 0;
 

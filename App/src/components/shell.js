@@ -31,8 +31,7 @@ export class Shell extends React.Component
     {
         return <Router>
 
-            <section className="mainTitle">
-                <h1>PANTRYMO</h1>
+            <section className="mainNav">
                 <nav>
                     <ul>
                         <li>

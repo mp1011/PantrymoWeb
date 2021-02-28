@@ -23,11 +23,32 @@ export var SelectedIngredientsPanel = function (_React$Component) {
             var list = this.props.selectedIngredients.map(function (ing) {
                 return React.createElement(SelectedIngredient, { key: ing, value: ing, onIngredientRemoved: _this2.props.onIngredientRemoved });
             });
+            var suffix = "";
+            var label = "What can I make with . . .";
+
+            if (list.length > 0) {
+                label = "What can I make with ";
+                suffix = React.createElement(
+                    "h2",
+                    { className: "suffix" },
+                    "?"
+                );
+            }
 
             return React.createElement(
-                "ul",
-                { className: "ingredientsList" },
-                list
+                "section",
+                null,
+                React.createElement(
+                    "h2",
+                    null,
+                    label
+                ),
+                React.createElement(
+                    "ul",
+                    { className: "ingredientsList" },
+                    list
+                ),
+                suffix
             );
         }
     }]);
@@ -58,7 +79,12 @@ export var SelectedIngredient = function (_React$Component2) {
             return React.createElement(
                 "li",
                 { className: "chosenIngredient", onClick: this.remove },
-                React.createElement("input", { type: "button", value: this.props.value, onClick: this.remove })
+                React.createElement("input", { type: "button", value: this.props.value, onClick: this.remove }),
+                React.createElement(
+                    "p",
+                    { className: "delimiter" },
+                    "&"
+                )
             );
         }
     }]);

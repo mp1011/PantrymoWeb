@@ -22,7 +22,7 @@ export class CuisinePicker extends React.Component
         let elements = document.getElementsByClassName("otherMatch");
         for (let item of elements) 
         {
-            item.style["display"]  = "inherit";
+            item.className += " appear";
         }
     }
 
@@ -31,7 +31,6 @@ export class CuisinePicker extends React.Component
         let showMoreButton="";
         var cuisineButtons = [];
         let title="";
-        let subTitle="";
 
         if(this.props.isForIngredientsPage)
         {
@@ -39,15 +38,13 @@ export class CuisinePicker extends React.Component
                 return "";
 
             title="Browse Ingredients by Cuisine";
-            subTitle=<p>Choose a cuisine to see which ingredients appear in the most recipes.</p>;
 
             cuisineButtons.push(this.props.cuisines.map(c=> this.addCuisineButton(c.name, true,false)));
         }
         else 
         {
-            title="Which cuisines do you cook at home?";
-            subTitle= <p><i>(Optional)</i> Choose the cuisines you usually cook and we'll suggest recipes using ingredients common to those cuisines.</p>;
-
+            title="Which cuisines do you cook at home? (optional)";
+         
             if(!this.props.rankedCuisines ||
                 (this.props.rankedCuisines.best.length == 0 
                     && this.props.rankedCuisines.good.length == 0
@@ -65,7 +62,6 @@ export class CuisinePicker extends React.Component
 
         return  <section className="whiteBox cuisinePicker">
                     <h2>{title}</h2>
-                    {subTitle}
                     <ul className="cuisineList">{cuisineButtons}{showMoreButton}</ul>  
                     
                 </section>
