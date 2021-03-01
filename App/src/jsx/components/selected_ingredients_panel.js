@@ -24,10 +24,10 @@ export var SelectedIngredientsPanel = function (_React$Component) {
                 return React.createElement(SelectedIngredient, { key: ing, value: ing, onIngredientRemoved: _this2.props.onIngredientRemoved });
             });
             var suffix = "";
-            var label = "What can I make with . . .";
+            var label = "What can I cook with . . .";
 
             if (list.length > 0) {
-                label = "What can I make with ";
+                label = "What can I cook with ";
                 suffix = React.createElement(
                     "h2",
                     { className: "suffix" },

@@ -5,6 +5,7 @@
   "private": "true",
   "scripts": {
     "devStart": "npx copyfiles src/settings/dev/* -f src && start http-server --proxy http://localhost:8080/index.html? -d false && start npx babel --watch src/components --out-dir src/jsx/components --presets react-app/prod",
+    "devStartRealServer": "npx copyfiles src/settings/azure/* -f src && start http-server --proxy http://localhost:8080/index.html? -d false && start npx babel --watch src/components --out-dir src/jsx/components --presets react-app/prod",    
     "localBuild": "npx copyfiles src/settings/azure/* -f src && npx webpack --config webpack.config.azure.js && start http-server dist",
     "dockerPush": "npx copyfiles src/settings/azure/* -f src && npx webpack --config webpack.config.azure.js && docker build --tag mp1011/recipeapp:latest . && docker push mp1011/recipeapp:latest",
     "dockerPushTest": "npx copyfiles src/settings/azure/* -f src && npx webpack --config webpack.config.azure.js && docker build --tag mp1011/recipeapp:test . && docker push mp1011/recipeapp:test"

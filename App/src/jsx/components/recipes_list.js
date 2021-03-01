@@ -66,7 +66,7 @@ export var RecipesList = function (_React$Component) {
                   "ul",
                   { className: "recipeList" },
                   this.props.recipes.map(function (r) {
-                     return React.createElement(Recipe, Object.assign({ key: r.url, debug: _this2.props.debug, selectedIngredients: _this2.props.selectedIngredients }, r));
+                     return React.createElement(Recipe, Object.assign({ key: r.key, debug: _this2.props.debug, selectedIngredients: _this2.props.selectedIngredients }, r));
                   }),
                   loader
                )

@@ -59,7 +59,7 @@ export var Shell = function (_React$Component) {
                                 React.createElement(
                                     NavLink,
                                     { activeClassName: 'active', exact: true, to: '/' },
-                                    'Recipes'
+                                    'Find Recipes'
                                 )
                             ),
                             React.createElement(
@@ -68,7 +68,7 @@ export var Shell = function (_React$Component) {
                                 React.createElement(
                                     NavLink,
                                     { activeClassName: 'active', to: '/articles' },
-                                    'Articles'
+                                    'Cooking Guides'
                                 )
                             ),
                             React.createElement(
@@ -77,7 +77,7 @@ export var Shell = function (_React$Component) {
                                 React.createElement(
                                     NavLink,
                                     { activeClassName: 'active', to: '/ingredients' },
-                                    'Ingredients'
+                                    'Ingredients by Cuisine'
                                 )
                             )
                         )

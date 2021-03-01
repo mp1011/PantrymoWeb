@@ -9,11 +9,11 @@ export class SelectedIngredientsPanel extends React.Component
     {
       let list = this.props.selectedIngredients.map((ing)=><SelectedIngredient key={ing} value={ing} onIngredientRemoved={this.props.onIngredientRemoved}/>);
       let suffix = "";
-      let label = "What can I make with . . .";
+      let label = "What can I cook with . . .";
 
       if(list.length > 0)
       {
-          label = "What can I make with ";
+          label = "What can I cook with ";
           suffix = <h2 className="suffix">?</h2>
       }
 

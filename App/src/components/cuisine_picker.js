@@ -37,14 +37,31 @@ export class CuisinePicker extends React.Component
             if(!this.props.cuisines)
                 return "";
 
-            title="Browse Ingredients by Cuisine";
+            title="Tap a cuisine to see it's most popular ingredients:";
 
             cuisineButtons.push(this.props.cuisines.map(c=> this.addCuisineButton(c.name, true,false)));
         }
         else 
         {
-            title="Which cuisines do you cook at home? (optional)";
-         
+            title="(optional) Show recipes that use ingredients common to";
+
+            let selectedCuisines = this.props.cuisines
+                                        .filter(c=>c.selected)
+                                        .map(c=>c.name);
+
+            if(selectedCuisines.length == 0)
+                title += " ________ cuisine:";
+            else if(selectedCuisines.length == 1)
+                title += ` ${selectedCuisines[0]} cuisine:`;
+            else if(selectedCuisines.length == 2)
+                title += ` ${selectedCuisines[0]} or ${selectedCuisines[1]} cuisines:`;
+            else 
+            {
+                var allButLast = selectedCuisines.slice(0,selectedCuisines.length-1);
+                title += ` ${allButLast.join(", ")} or ${selectedCuisines[selectedCuisines.length-1]} cuisines:`;  
+            }
+            
+
             if(!this.props.rankedCuisines ||
                 (this.props.rankedCuisines.best.length == 0 
                     && this.props.rankedCuisines.good.length == 0

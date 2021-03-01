@@ -136,8 +136,9 @@ export class StateHandler
 
         try
         {
-            let result = window.location.hash
-                        .split('&')[0]
+            let result = window.location.hash.substring(1)
+                        .split('&')
+                        .find(c=>c.split('=')[0] == 'ingredients')
                         .split('=')[1]
                         .split(',')
                         .map(c=> decodeURIComponent(c))
@@ -160,8 +161,9 @@ export class StateHandler
 
         try
         {
-            let result = window.location.hash
-                        .split('&')[1]
+            let result = window.location.hash.substring(1)
+                        .split('&')
+                        .find(c=>c.split('=')[0] == 'cuisines')
                         .split('=')[1]
                         .split(',')
                         .map(c=> decodeURIComponent(c))

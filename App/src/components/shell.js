@@ -35,13 +35,13 @@ export class Shell extends React.Component
                 <nav>
                     <ul>
                         <li>
-                            <NavLink activeClassName='active' exact={true} to="/">Recipes</NavLink>
+                            <NavLink activeClassName='active' exact={true} to="/">Find Recipes</NavLink>
                         </li>
                         <li>
-                            <NavLink activeClassName='active' to="/articles">Articles</NavLink>
+                            <NavLink activeClassName='active' to="/articles">Cooking Guides</NavLink>
                         </li>
                         <li>
-                            <NavLink activeClassName='active' to="/ingredients">Ingredients</NavLink>
+                            <NavLink activeClassName='active' to="/ingredients">Ingredients by Cuisine</NavLink>
                         </li>
                     </ul>
                 </nav>

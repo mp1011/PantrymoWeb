@@ -1,3 +1,5 @@
+import {isMobileScreenSize} from '/src/services/general.js'
+
 export class ArticleViewer extends React.Component 
 {
     constructor(props) 
@@ -49,7 +51,7 @@ export class ArticleViewer extends React.Component
             this.setState({ currentArticleTitle: article.title});
             this.showArticle(article, jumpTo, addToHistory);
         }
-        else if(window.innerWidth < 1200)
+        else if(isMobileScreenSize())
         {
             this.setState({ currentArticleTitle: null});
         }
@@ -76,9 +78,7 @@ export class ArticleViewer extends React.Component
                 if(addToHistory)
                     history.pushState(e, e.title, `/articles/${e.file}`);
 
-                let titleElement = document.getElementById('articleTitle');
-                titleElement.innerHTML = e.title;
-
+                document.getElementById('articleTitle').innerHTML = e.title;
                 document.getElementById('articleBody').innerHTML = html;
 
                 if(jumpTo)
@@ -89,17 +89,15 @@ export class ArticleViewer extends React.Component
                             jumpToElement.scrollIntoView();
                     }, 100)                    
                 }
-                else 
-                {
-                    titleElement.scrollIntoView();
-                }
              });
     }
 
     createArticleElement(article)
     {
+        let jumpTo = isMobileScreenSize() ? "articleTitle" : null;
+
         var selected = (article.title == this.state.currentArticleTitle) ? "selected" : "";
-        return <li className={selected} onClick={()=> this.showArticle(article,null,true)} key={article.title}>
+        return <li className={selected} onClick={()=> this.showArticle(article,jumpTo,true)} key={article.title}>
                     <span>{article.title}</span> <span className="date">{article.published}</span>
                 </li>;
     }

@@ -83,7 +83,13 @@ export var RecipeApp = function (_React$Component) {
         value: function updateCuisines(ingredients) {
             var _this2 = this;
 
-            this.state.recipeAppApi.getCuisinesByIngredients(ingredients).then(function (rankedCuisines) {
+            var selectedCuisines = this.state.cuisines.filter(function (c) {
+                return c.selected;
+            }).map(function (c) {
+                return c.name;
+            });
+
+            this.state.recipeAppApi.getCuisinesByIngredients(ingredients, selectedCuisines).then(function (rankedCuisines) {
                 _this2.setState({ rankedCuisines: rankedCuisines });
             });
         }
@@ -163,7 +169,7 @@ export var RecipeApp = function (_React$Component) {
             }
 
             var recipesToDisplay = this.state.recipes.concat(filteredRecipes).groupBy(function (rec) {
-                return rec.url;
+                return rec.key;
             }).getValues().map(function (g) {
                 return g[0];
             });

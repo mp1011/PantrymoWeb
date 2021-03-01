@@ -6,6 +6,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+import { isMobileScreenSize } from '/src/services/general.js';
+
 export var ArticleViewer = function (_React$Component) {
     _inherits(ArticleViewer, _React$Component);
 
@@ -57,7 +59,7 @@ export var ArticleViewer = function (_React$Component) {
             if (article) {
                 this.setState({ currentArticleTitle: article.title });
                 this.showArticle(article, jumpTo, addToHistory);
-            } else if (window.innerWidth < 1200) {
+            } else if (isMobileScreenSize()) {
                 this.setState({ currentArticleTitle: null });
             } else {
                 this.setState({ currentArticleTitle: this.state.articles[0].title });
@@ -79,9 +81,7 @@ export var ArticleViewer = function (_React$Component) {
 
                 if (addToHistory) history.pushState(e, e.title, "/articles/" + e.file);
 
-                var titleElement = document.getElementById('articleTitle');
-                titleElement.innerHTML = e.title;
-
+                document.getElementById('articleTitle').innerHTML = e.title;
                 document.getElementById('articleBody').innerHTML = html;
 
                 if (jumpTo) {
@@ -89,8 +89,6 @@ export var ArticleViewer = function (_React$Component) {
                         var jumpToElement = document.getElementById(jumpTo);
                         if (jumpToElement) jumpToElement.scrollIntoView();
                     }, 100);
-                } else {
-                    titleElement.scrollIntoView();
                 }
             });
         }
@@ -99,11 +97,13 @@ export var ArticleViewer = function (_React$Component) {
         value: function createArticleElement(article) {
             var _this4 = this;
 
+            var jumpTo = isMobileScreenSize() ? "articleTitle" : null;
+
             var selected = article.title == this.state.currentArticleTitle ? "selected" : "";
             return React.createElement(
                 "li",
                 { className: selected, onClick: function onClick() {
-                        return _this4.showArticle(article, null, true);
+                        return _this4.showArticle(article, jumpTo, true);
                     }, key: article.title },
                 React.createElement(
                     "span",

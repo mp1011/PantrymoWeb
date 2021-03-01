@@ -25,7 +25,7 @@ export class RecipesList extends React.Component
       {
             return <div id="recipeListContainer">         
                <ul className="recipeList">
-                  {this.props.recipes.map(r=> <Recipe key={r.url} debug={this.props.debug} selectedIngredients={this.props.selectedIngredients} {...r} />)}
+                  {this.props.recipes.map(r=> <Recipe key={r.key} debug={this.props.debug} selectedIngredients={this.props.selectedIngredients} {...r} />)}
                   {loader}                 
                </ul>
             </div>

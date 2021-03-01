@@ -10,6 +10,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /* eslint-disable react/react-in-jsx-scope */
 import { RecipeAppApi } from '/src/services/recipeapp_api.js';
 import { CuisinePicker } from '/src/jsx/components/cuisine_picker.js';
+import { isMobileScreenSize } from '/src/services/general.js';
 
 // eslint-disable-next-line no-undef
 export var IngredientsPage = function (_React$Component) {
@@ -102,6 +103,11 @@ export var IngredientsPage = function (_React$Component) {
         key: 'componentDidUpdate',
         value: function componentDidUpdate() {
             this.layoutItems();
+
+            if (this.state.rankedIngredients && isMobileScreenSize()) {
+                var legendElement = document.getElementById("ingredientsLegend");
+                if (legendElement) legendElement.scrollIntoView();
+            }
         }
     }, {
         key: 'componentWillUnmount',
@@ -162,6 +168,7 @@ export var IngredientsPage = function (_React$Component) {
             }
 
             var tree = "";
+            var legend = "";
 
             if (this.state.rankedIngredients) {
                 var list = this.state.rankedIngredients.rankedChildren.map(function (c) {
@@ -181,12 +188,77 @@ export var IngredientsPage = function (_React$Component) {
                         list
                     )
                 );
+
+                legend = React.createElement(
+                    'ul',
+                    { id: 'ingredientsLegend', className: 'ingredientsLegend whiteBox' },
+                    React.createElement(
+                        'li',
+                        null,
+                        React.createElement(
+                            'p',
+                            { className: 'stars' },
+                            '\u2606\u2606\u2606\u2606'
+                        ),
+                        React.createElement(
+                            'p',
+                            null,
+                            '- Used in at least half of all recipes'
+                        )
+                    ),
+                    React.createElement(
+                        'li',
+                        null,
+                        React.createElement(
+                            'p',
+                            { className: 'stars' },
+                            '\u2606\u2606\u2606'
+                        ),
+                        ' ',
+                        React.createElement(
+                            'p',
+                            null,
+                            '- Used in at least a quarter of all recipes'
+                        )
+                    ),
+                    React.createElement(
+                        'li',
+                        null,
+                        React.createElement(
+                            'p',
+                            { className: 'stars' },
+                            '\u2606\u2606'
+                        ),
+                        ' ',
+                        React.createElement(
+                            'p',
+                            null,
+                            '- Used in at least 10% of recipes'
+                        )
+                    ),
+                    React.createElement(
+                        'li',
+                        null,
+                        React.createElement(
+                            'p',
+                            { className: 'stars' },
+                            '\u2606'
+                        ),
+                        ' ',
+                        React.createElement(
+                            'p',
+                            null,
+                            '- Used in at least 2% of recipes'
+                        )
+                    )
+                );
             }
 
             return React.createElement(
                 'section',
                 null,
                 React.createElement(CuisinePicker, { isForIngredientsPage: 'true', cuisines: this.state.cuisines, onCuisineToggled: this.onCuisineToggled }),
+                legend,
                 tree
             );
         }
@@ -249,7 +321,7 @@ export var IngredientTree = function (_React$Component2) {
         key: 'shouldHide',
         value: function shouldHide(item, thisIndex, totalCount) {
             var maxItemsPerNode = this.props.depth == 1 ? 10 : 5;
-            if (window.innerWidth <= 1200) maxItemsPerNode = 10000;
+            if (isMobileScreenSize()) maxItemsPerNode = 10000;
 
             if (thisIndex < maxItemsPerNode) return false;
 
@@ -272,7 +344,8 @@ export var IngredientTree = function (_React$Component2) {
             }
 
             var innerList = "";
-            var percent = (this.props.ingredients.frequency * 100).toFixed(0) + "%";
+            var percent = "";
+            if (this.props.ingredients.frequency < 0.1) percent = "☆";else if (this.props.ingredients.frequency < 0.25) percent = "☆☆";else if (this.props.ingredients.frequency < 0.5) percent = "☆☆☆";else percent = "☆☆☆☆";
 
             var colorClass = "";
             if (this.props.ingredients.frequency >= 0.5) colorClass = "green";else if (this.props.ingredients.frequency >= 0.1) colorClass = "yellow";else if (this.props.ingredients.frequency > 0) colorClass = "orange";else colorClass = "hide";
@@ -315,9 +388,7 @@ export var IngredientTree = function (_React$Component2) {
                     React.createElement(
                         'section',
                         { className: "percent" },
-                        '(',
-                        percent,
-                        ')'
+                        percent
                     )
                 ),
                 innerList

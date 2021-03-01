@@ -111,8 +111,16 @@
       height: 2.5rem;
       background-color: rgb(204, 226, 178);
       border-top:solid 1px rgb(37, 44, 28);
-      font-size:smaller;
+      font-size:10px;
       color:black;
+  }
+
+  @media(min-width:1200px)
+  {
+    footer
+    {   
+        font-size: smaller;;
+    }
   }
   
   #edamam-badge
@@ -177,7 +185,6 @@
      
       margin:0rem;
       padding:0rem;
-      height: 1.8rem;
       margin-left: auto;
       margin-right:auto;
       
@@ -189,36 +196,42 @@
   {
       nav 
       {
-          width:25%;
+          width:40%;
+      }
+
+      nav li
+      {
+        padding-top:0.5rem;
+        padding-bottom:0.5rem;
       }
   }
   
   
   nav ul
   {
-      display:flex;
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
       justify-content: center;
       list-style-type: none;
       vertical-align: middle;
-      line-height: 1.8rem;
       margin-left:0.5rem;
       margin-right:0.5rem;
   }
   
   nav li 
   {
-      flex-basis: 1;
       font-weight: bold;
       text-align: center;
       text-decoration: none;
       color: black;
-      flex-grow: 1;
+      display:flex;
+      align-items: center;
   }
   
   
   nav li:hover
   {
-      text-decoration: underline;
+    font-size: 1.1rem; 
   }
   
   nav li:not(:last-child)
@@ -230,28 +243,32 @@
 
   nav li a
   {
+      flex-grow: 1;
+      box-sizing: border-box;
       color:black;
-      text-decoration: none;
+      text-decoration: none;  
   }
   
   nav .active
   {    
-      transition: font-size 100ms ease-in;
-      font-size: 1.2rem;    
+      font-style: italic;
+      box-sizing: border-box;
   }
-  
-  
 
-
-
+@media(min-width:1200px)
+{
+    nav .active
+    {    
+        transition: font-size 100ms ease-in;
+        font-size: 1.3rem;  
+        border-bottom: solid 1px darkgreen;
+        font-style: normal;
+    }
+}
 
 a{
     color: black;
 }
-
-
-
-
 
 .articlePage
 {
@@ -827,6 +844,8 @@ ul.articleList li:not(:last-child)
     text-transform: capitalize;
     white-space: nowrap;
     box-sizing: border-box;
+    width: 100%;
+    display:inline-block;
 }
 
 #ingredientsTreeContainer>ul
@@ -975,4 +994,39 @@ ul.articleList li:not(:last-child)
 .ingredientsTree li .finalNode:hover 
 {
     background-color: rgb(231, 252, 128);
+}
+
+ul.ingredientsLegend 
+{
+    list-style-type: none;
+    display:flex;    
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+ul.ingredientsLegend li 
+{
+    display:grid;
+    grid-template-columns: 4rem 1fr;
+    align-items: baseline;
+    padding-right:2rem;
+    justify-content: space-between;
+}
+
+ul.ingredientsLegend li .stars
+{
+    padding-right:0.2rem;
+}
+
+@media(min-width:1200px)
+{
+    ul.ingredientsLegend 
+    {
+        flex-direction: row;
+    }
+
+    ul.ingredientsLegend li 
+    {
+        display:flex;
+    }
 }

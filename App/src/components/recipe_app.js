@@ -69,10 +69,14 @@ export class RecipeApp extends React.Component
 
     updateCuisines(ingredients)
     {  
-      this.state.recipeAppApi.getCuisinesByIngredients(ingredients)
-      .then(rankedCuisines => {
-          this.setState({rankedCuisines: rankedCuisines});
-      });
+      let selectedCuisines = this.state.cuisines
+        .filter(c=>c.selected)
+        .map(c=>c.name);
+
+      this.state.recipeAppApi.getCuisinesByIngredients(ingredients, selectedCuisines)
+        .then(rankedCuisines => {
+            this.setState({rankedCuisines: rankedCuisines});
+        });
     }
 
     updateRecipes(ingredients, autoScroll)
@@ -152,7 +156,7 @@ export class RecipeApp extends React.Component
        
       var recipesToDisplay = this.state.recipes
           .concat(filteredRecipes)
-          .groupBy(rec => rec.url)
+          .groupBy(rec => rec.key)
           .getValues()
           .map(g=> g[0]);
 

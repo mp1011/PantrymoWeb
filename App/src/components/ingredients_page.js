@@ -2,6 +2,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 import {RecipeAppApi} from '/src/services/recipeapp_api.js'
 import {CuisinePicker} from '/src/jsx/components/cuisine_picker.js'
+import {isMobileScreenSize} from '/src/services/general.js'
 
 // eslint-disable-next-line no-undef
 export class IngredientsPage extends React.Component 
@@ -99,6 +100,13 @@ export class IngredientsPage extends React.Component
     componentDidUpdate()
     {
         this.layoutItems();
+
+        if(this.state.rankedIngredients && isMobileScreenSize())
+        {
+            var legendElement = document.getElementById("ingredientsLegend");
+            if(legendElement)
+                legendElement.scrollIntoView();
+        }
     }
 
     componentWillUnmount()
@@ -138,6 +146,7 @@ export class IngredientsPage extends React.Component
         }
 
         var tree="";
+        var legend ="";
 
         if(this.state.rankedIngredients)
         {
@@ -150,11 +159,29 @@ export class IngredientsPage extends React.Component
 
             tree=<section id="ingredientsTreeContainer">
                 <ul id="ingredientsTreeMain" className="ingredientsTree">{list}</ul>
-            </section>
+            </section>;
+
+            legend=  <ul id="ingredientsLegend" className="ingredientsLegend whiteBox">
+                        <li>
+                            <p className="stars">☆☆☆☆</p><p>- Used in at least half of all recipes</p>
+                        </li>
+                        <li>
+                            <p className="stars">☆☆☆</p> <p>- Used in at least a quarter of all recipes</p>
+                        </li>
+
+                        <li>
+                            <p className="stars">☆☆</p> <p>- Used in at least 10% of recipes</p>
+                        </li>
+
+                        <li>
+                            <p className="stars">☆</p> <p>- Used in at least 2% of recipes</p>
+                        </li>
+                    </ul>;
         }
 
         return <section>
                     <CuisinePicker isForIngredientsPage='true' cuisines={this.state.cuisines} onCuisineToggled={this.onCuisineToggled} />
+                    {legend}
                     {tree}
                 </section>;
     }
@@ -191,7 +218,7 @@ export class IngredientTree extends React.Component
     shouldHide(item, thisIndex, totalCount)
     {
         let maxItemsPerNode = this.props.depth == 1 ? 10 : 5;
-        if(window.innerWidth <= 1200)
+        if(isMobileScreenSize())
             maxItemsPerNode=10000;
 
         if(thisIndex < maxItemsPerNode)
@@ -218,7 +245,15 @@ export class IngredientTree extends React.Component
         }
 
         let innerList ="";
-        let percent = (this.props.ingredients.frequency * 100).toFixed(0) + "%";
+        let percent = "";
+        if(this.props.ingredients.frequency < 0.1)
+            percent = "☆";
+        else if(this.props.ingredients.frequency < 0.25)
+            percent = "☆☆";
+        else if(this.props.ingredients.frequency < 0.5)
+            percent = "☆☆☆";
+        else
+            percent = "☆☆☆☆";
 
         let colorClass = "";
         if(this.props.ingredients.frequency >= 0.5)
@@ -255,7 +290,7 @@ export class IngredientTree extends React.Component
         return <li className={colorClass} style={displayStyle}>
                  <a href={`/#ingredients=${this.props.ingredients.name}&cuisines=${this.props.selectedCuisine}`} className="ingredientName">
                      {this.props.ingredients.name}
-                     <section className={"percent"}>({percent})</section>
+                     <section className={"percent"}>{percent}</section>
                  </a>
                  
                  {innerList}

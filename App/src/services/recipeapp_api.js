@@ -8,10 +8,11 @@ export class RecipeAppApi
         this.pageSize=settings.pageSize;
     }
 
-    getCuisinesByIngredients(ingredients)
+    getCuisinesByIngredients(ingredients, selectedCuisines)
     {
         var ingredientsCSV = ingredients.join(",");
-        return this.httpUtility.getJson(`https://${settings.host}/api/Cuisines/ByIngredients?ingredients=${ingredientsCSV}`, this.validResult)
+        var selectedCuisinesCSV = (selectedCuisines??"").join(",");
+        return this.httpUtility.getJson(`https://${settings.host}/api/Cuisines/ByIngredients?ingredients=${ingredientsCSV}&selectedCuisines=${selectedCuisinesCSV}`, this.validResult)
             .catch(this.showErrorInConsole);
     }
 
