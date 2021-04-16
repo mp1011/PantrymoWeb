@@ -115,6 +115,11 @@
       color:black;
   }
 
+  #footerLeft a
+  {
+      display:block;
+  }
+
   @media(min-width:1200px)
   {
     footer

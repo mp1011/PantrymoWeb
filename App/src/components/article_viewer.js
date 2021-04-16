@@ -17,7 +17,9 @@ export class ArticleViewer extends React.Component
                                 { title: "The Beginner's Survival Guide to Cooking", file: "beginnersguide", published: "Jan 10 2021" },
                                 { title: "Skills you should learn", file: "skills", published: "Jan 10 2021" },
                                 { title: "Dimensions of Flavor", file: "flavor", published: "Jan 14 2021" },
-                                { title: "How to Cook Chicken Breast", file: "chickenbreast", published: "Feb 7 2021" },                                                                
+                                { title: "How to Cook Chicken Breast", file: "chickenbreast", published: "Feb 7 2021" },    
+                                { title: "Broth vs Stock", file: "brothandstock", published: "Apr 3 2021" },
+                                { title: "The Art of Figuring Out What the Heck to Eat Every Day", file: "decidingondinner", published: "Apr 15 2021" },                                                         
                     ]};
     }
 

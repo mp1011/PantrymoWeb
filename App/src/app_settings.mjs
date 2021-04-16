@@ -4,6 +4,6 @@ export var settings=
     debugMode: false,
     enableCache: window.caches,
     pageSize:50,
-    email: "pantrymonium@gmail.com",
+    email: "pantrymo.feedback@gmail.com",
     adEvery: 0
 }
