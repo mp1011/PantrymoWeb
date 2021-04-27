@@ -8,6 +8,7 @@ import {RecipesList} from '/src/jsx/components/recipes_list.js'
 import {StateHandler} from '/src/services/state_handler.js'
 import {getRecipeScore} from '/src/services/recipe_scoring_service.js'
 import {settings} from '/src/app_settings.mjs'
+import {PairingSuggestionsPanel} from '/src/jsx/components/pairing_suggestions.js'
 
 // eslint-disable-next-line no-undef
 export class RecipeApp extends React.Component 
@@ -32,6 +33,8 @@ export class RecipeApp extends React.Component
       this.scrollToFirstResultIfNeeded = this .scrollToFirstResultIfNeeded.bind(this);
       this.insertAds = this.insertAds.bind(this);
       this.updateCuisines = this.updateCuisines.bind(this);
+      this.onSuggestedIngredientSelected = this.onSuggestedIngredientSelected.bind(this);
+      this.suggestPairings = this.suggestPairings.bind(this);
 
       var httpUtility = props.httpUtility;
       var stateHandler = new StateHandler();
@@ -45,7 +48,8 @@ export class RecipeApp extends React.Component
                       httpUtility: httpUtility,
                       recipeAppApi: recipeAppApi,
                       stateHandler: stateHandler,
-                      debug: settings.debugMode
+                      debug: settings.debugMode,
+                      suggestedPairings: []
                    };
     }
 
@@ -67,6 +71,26 @@ export class RecipeApp extends React.Component
       this.updateRecipes(ingredients, true);
     }
 
+    suggestPairings()
+    {
+      
+      let selectedCuisines = this.state.cuisines
+        .filter(c=>c.selected)
+        .map(c=>c.name);
+
+        this.state.recipeAppApi.suggestPairings(this.state.selectedIngredients, selectedCuisines)
+        .then(pairings=> {
+          this.setState({suggestedPairings: pairings});
+        })
+    }
+
+    
+    onSuggestedIngredientSelected(ingredient)
+    {
+        this.onIngredientAdded(ingredient);
+    }
+
+
     updateCuisines(ingredients)
     {  
       let selectedCuisines = this.state.cuisines
@@ -81,6 +105,8 @@ export class RecipeApp extends React.Component
 
     updateRecipes(ingredients, autoScroll)
     {
+        this.setState( {suggestedPairings: [] });
+
         const selectedCuisines = this.state.cuisines.filter(c=>c.selected);
         this.state.stateHandler.onIngredientsChanged(ingredients);
 
@@ -92,6 +118,9 @@ export class RecipeApp extends React.Component
 
         this.setState({ loadingRecipes: true, autoScroll: autoScroll });
         this.setState({recipes: [], recipePages: [], selectedIngredients: ingredients});
+        
+        this.suggestPairings();     
+
         this.state.recipeAppApi
               .recipeSearch(ingredients, selectedCuisines, 1)
               .catch(this.handleError)
@@ -383,6 +412,7 @@ export class RecipeApp extends React.Component
               <section className="whiteBox" id="ingredientPickerContainer">
                 <SelectedIngredientsPanel selectedIngredients={this.state.selectedIngredients} onIngredientRemoved={this.onIngredientRemoved} />
                 <IngredientInputBox onIngredientAdded={this.onIngredientAdded} recipeAppApi={this.state.recipeAppApi} selectedIngredients={this.state.selectedIngredients} />
+                <PairingSuggestionsPanel suggestedPairings={this.state.suggestedPairings} onSuggestedIngredientSelected={this.onSuggestedIngredientSelected} />
               </section>           
 
               <CuisinePicker cuisines={this.state.cuisines} rankedCuisines={this.state.rankedCuisines} onCuisineToggled={this.onCuisineToggled} />         

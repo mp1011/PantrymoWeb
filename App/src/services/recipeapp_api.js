@@ -22,6 +22,14 @@ export class RecipeAppApi
             .catch(this.showErrorInConsole);
     }
 
+    suggestPairings(ingredients, selectedCuisines)
+    {
+        var ingredientsCSV = ingredients.join(",");
+        var selectedCuisinesCSV = (selectedCuisines??"").join(",");
+        return this.httpUtility.getJson(`https://${settings.host}/api/Ingredient/Pairings?ingredients=${ingredientsCSV}&cuisines=${selectedCuisinesCSV}`, this.validResult)
+            .catch(this.showErrorInConsole);
+    }
+
     recipeSearch(query, selectedCuisines, page)
     {  
         const from = (page-1) * this.pageSize;

@@ -16,6 +16,7 @@ import { RecipesList } from '/src/jsx/components/recipes_list.js';
 import { StateHandler } from '/src/services/state_handler.js';
 import { getRecipeScore } from '/src/services/recipe_scoring_service.js';
 import { settings } from '/src/app_settings.mjs';
+import { PairingSuggestionsPanel } from '/src/jsx/components/pairing_suggestions.js';
 
 // eslint-disable-next-line no-undef
 export var RecipeApp = function (_React$Component) {
@@ -43,6 +44,8 @@ export var RecipeApp = function (_React$Component) {
         _this.scrollToFirstResultIfNeeded = _this.scrollToFirstResultIfNeeded.bind(_this);
         _this.insertAds = _this.insertAds.bind(_this);
         _this.updateCuisines = _this.updateCuisines.bind(_this);
+        _this.onSuggestedIngredientSelected = _this.onSuggestedIngredientSelected.bind(_this);
+        _this.suggestPairings = _this.suggestPairings.bind(_this);
 
         var httpUtility = props.httpUtility;
         var stateHandler = new StateHandler();
@@ -56,7 +59,8 @@ export var RecipeApp = function (_React$Component) {
             httpUtility: httpUtility,
             recipeAppApi: recipeAppApi,
             stateHandler: stateHandler,
-            debug: settings.debugMode
+            debug: settings.debugMode,
+            suggestedPairings: []
         };
         return _this;
     }
@@ -79,8 +83,8 @@ export var RecipeApp = function (_React$Component) {
             this.updateRecipes(ingredients, true);
         }
     }, {
-        key: 'updateCuisines',
-        value: function updateCuisines(ingredients) {
+        key: 'suggestPairings',
+        value: function suggestPairings() {
             var _this2 = this;
 
             var selectedCuisines = this.state.cuisines.filter(function (c) {
@@ -89,13 +93,35 @@ export var RecipeApp = function (_React$Component) {
                 return c.name;
             });
 
+            this.state.recipeAppApi.suggestPairings(this.state.selectedIngredients, selectedCuisines).then(function (pairings) {
+                _this2.setState({ suggestedPairings: pairings });
+            });
+        }
+    }, {
+        key: 'onSuggestedIngredientSelected',
+        value: function onSuggestedIngredientSelected(ingredient) {
+            this.onIngredientAdded(ingredient);
+        }
+    }, {
+        key: 'updateCuisines',
+        value: function updateCuisines(ingredients) {
+            var _this3 = this;
+
+            var selectedCuisines = this.state.cuisines.filter(function (c) {
+                return c.selected;
+            }).map(function (c) {
+                return c.name;
+            });
+
             this.state.recipeAppApi.getCuisinesByIngredients(ingredients, selectedCuisines).then(function (rankedCuisines) {
-                _this2.setState({ rankedCuisines: rankedCuisines });
+                _this3.setState({ rankedCuisines: rankedCuisines });
             });
         }
     }, {
         key: 'updateRecipes',
         value: function updateRecipes(ingredients, autoScroll) {
+            this.setState({ suggestedPairings: [] });
+
             var selectedCuisines = this.state.cuisines.filter(function (c) {
                 return c.selected;
             });
@@ -108,6 +134,9 @@ export var RecipeApp = function (_React$Component) {
 
             this.setState({ loadingRecipes: true, autoScroll: autoScroll });
             this.setState({ recipes: [], recipePages: [], selectedIngredients: ingredients });
+
+            this.suggestPairings();
+
             this.state.recipeAppApi.recipeSearch(ingredients, selectedCuisines, 1).catch(this.handleError).then(this.applyScores).then(this.addFetchedPage);
         }
     }, {
@@ -260,19 +289,19 @@ export var RecipeApp = function (_React$Component) {
     }, {
         key: 'componentDidMount',
         value: function componentDidMount() {
-            var _this3 = this;
+            var _this4 = this;
 
             this.prepareSite();
 
             window.onpopstate = function () {
-                return _this3.setInitialState();
+                return _this4.setInitialState();
             };
             window.addEventListener('scroll', this.onScroll);
         }
     }, {
         key: 'prepareSite',
         value: function prepareSite() {
-            var _this4 = this;
+            var _this5 = this;
 
             this.state.recipeAppApi.getCuisineNames().catch(function (e) {
                 console.log(e);
@@ -281,11 +310,11 @@ export var RecipeApp = function (_React$Component) {
                     var cuisines = names.map(function (n) {
                         return { name: n, selected: false };
                     });
-                    _this4.setState({ cuisines: cuisines, isSiteReady: true });
-                    _this4.setInitialState();
+                    _this5.setState({ cuisines: cuisines, isSiteReady: true });
+                    _this5.setInitialState();
                 } else {
-                    _this4.setState({ cuisines: [], isSiteReady: false });
-                    setTimeout(_this4.prepareSite, 1000);
+                    _this5.setState({ cuisines: [], isSiteReady: false });
+                    setTimeout(_this5.prepareSite, 1000);
                 }
             });
         }
@@ -405,7 +434,8 @@ export var RecipeApp = function (_React$Component) {
                         'section',
                         { className: 'whiteBox', id: 'ingredientPickerContainer' },
                         React.createElement(SelectedIngredientsPanel, { selectedIngredients: this.state.selectedIngredients, onIngredientRemoved: this.onIngredientRemoved }),
-                        React.createElement(IngredientInputBox, { onIngredientAdded: this.onIngredientAdded, recipeAppApi: this.state.recipeAppApi, selectedIngredients: this.state.selectedIngredients })
+                        React.createElement(IngredientInputBox, { onIngredientAdded: this.onIngredientAdded, recipeAppApi: this.state.recipeAppApi, selectedIngredients: this.state.selectedIngredients }),
+                        React.createElement(PairingSuggestionsPanel, { suggestedPairings: this.state.suggestedPairings, onSuggestedIngredientSelected: this.onSuggestedIngredientSelected })
                     ),
                     React.createElement(CuisinePicker, { cuisines: this.state.cuisines, rankedCuisines: this.state.rankedCuisines, onCuisineToggled: this.onCuisineToggled }),
                     React.createElement(BackToTopPanel, null),

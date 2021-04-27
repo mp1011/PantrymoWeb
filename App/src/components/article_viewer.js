@@ -19,7 +19,9 @@ export class ArticleViewer extends React.Component
                                 { title: "Dimensions of Flavor", file: "flavor", published: "Jan 14 2021" },
                                 { title: "How to Cook Chicken Breast", file: "chickenbreast", published: "Feb 7 2021" },    
                                 { title: "Broth vs Stock", file: "brothandstock", published: "Apr 3 2021" },
-                                { title: "The Art of Figuring Out What the Heck to Eat Every Day", file: "decidingondinner", published: "Apr 15 2021" },                                                         
+                                { title: "The Art of Figuring Out What the Heck to Eat Every Day", file: "decidingondinner", published: "Apr 15 2021" }, 
+                                { title: "What Recipes Don't Tell You", file: "whatrecipesdonttellyou", published: "Apr 18 2021" }, 
+                                                                                      
                     ]};
     }
 
