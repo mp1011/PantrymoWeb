@@ -6,7 +6,6 @@ import {BackToTopPanel} from '/src/jsx/components/back_to_top_panel.js'
 import {SelectedIngredientsPanel} from '/src/jsx/components/selected_ingredients_panel.js'
 import {RecipesList} from '/src/jsx/components/recipes_list.js'
 import {StateHandler} from '/src/services/state_handler.js'
-import {getRecipeScore} from '/src/services/recipe_scoring_service.js'
 import {settings} from '/src/app_settings.mjs'
 import {PairingSuggestionsPanel} from '/src/jsx/components/pairing_suggestions.js'
 
@@ -25,7 +24,6 @@ export class RecipeApp extends React.Component
       this.fetchMore = this.fetchMore.bind(this);
       this.onScroll = this.onScroll.bind(this);
       this.setInitialState = this.setInitialState.bind(this);
-      this.applyScores = this.applyScores.bind(this);
       this.handleError = this.handleError.bind(this);
       this.prepareSite = this.prepareSite.bind(this);
       this.getIndexOfFirstRecipeBelowWindow = this.getIndexOfFirstRecipeBelowWindow.bind(this);
@@ -124,7 +122,6 @@ export class RecipeApp extends React.Component
         this.state.recipeAppApi
               .recipeSearch(ingredients, selectedCuisines, 1)
               .catch(this.handleError)
-              .then(this.applyScores)
               .then(this.addFetchedPage);
     }
 
@@ -143,17 +140,6 @@ export class RecipeApp extends React.Component
             pages.push(recipeResult);
 
         this.addRecipes(recipeResult.recipes);
-    }
-
-    applyScores(result)
-    {
-        result.recipes.forEach(r=>{
-          r.score = getRecipeScore(r);
-        })
-
-        result.recipes = result.recipes.sort((a,b)=> b.score - a.score);
-
-        return result;
     }
 
     addRecipes(unfilteredRecipes)
@@ -231,7 +217,6 @@ export class RecipeApp extends React.Component
       this.state.recipeAppApi
         .recipeSearch(this.state.selectedIngredients, selectedCuisines, nextPage)
         .catch(this.handleError)
-        .then(this.applyScores)
         .then(this.addFetchedPage);
       
     }
@@ -418,7 +403,8 @@ export class RecipeApp extends React.Component
               <CuisinePicker cuisines={this.state.cuisines} rankedCuisines={this.state.rankedCuisines} onCuisineToggled={this.onCuisineToggled} />         
                  
               <BackToTopPanel />
-              <RecipesList loading={this.state.loadingRecipes} recipes={this.state.recipes} selectedIngredients={this.state.selectedIngredients} debug={this.state.debug} />
+              <RecipesList loading={this.state.loadingRecipes} recipes={this.state.recipes} selectedIngredients={this.state.selectedIngredients} debug={this.state.debug} 
+                            badImageUrl={this.state.recipeAppApi.getBadImageUrl()} />
             </section>);
         }
         else 

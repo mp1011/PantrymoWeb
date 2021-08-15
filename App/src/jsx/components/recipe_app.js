@@ -14,7 +14,6 @@ import { BackToTopPanel } from '/src/jsx/components/back_to_top_panel.js';
 import { SelectedIngredientsPanel } from '/src/jsx/components/selected_ingredients_panel.js';
 import { RecipesList } from '/src/jsx/components/recipes_list.js';
 import { StateHandler } from '/src/services/state_handler.js';
-import { getRecipeScore } from '/src/services/recipe_scoring_service.js';
 import { settings } from '/src/app_settings.mjs';
 import { PairingSuggestionsPanel } from '/src/jsx/components/pairing_suggestions.js';
 
@@ -36,7 +35,6 @@ export var RecipeApp = function (_React$Component) {
         _this.fetchMore = _this.fetchMore.bind(_this);
         _this.onScroll = _this.onScroll.bind(_this);
         _this.setInitialState = _this.setInitialState.bind(_this);
-        _this.applyScores = _this.applyScores.bind(_this);
         _this.handleError = _this.handleError.bind(_this);
         _this.prepareSite = _this.prepareSite.bind(_this);
         _this.getIndexOfFirstRecipeBelowWindow = _this.getIndexOfFirstRecipeBelowWindow.bind(_this);
@@ -137,7 +135,7 @@ export var RecipeApp = function (_React$Component) {
 
             this.suggestPairings();
 
-            this.state.recipeAppApi.recipeSearch(ingredients, selectedCuisines, 1).catch(this.handleError).then(this.applyScores).then(this.addFetchedPage);
+            this.state.recipeAppApi.recipeSearch(ingredients, selectedCuisines, 1).catch(this.handleError).then(this.addFetchedPage);
         }
     }, {
         key: 'addFetchedPage',
@@ -154,19 +152,6 @@ export var RecipeApp = function (_React$Component) {
             } else pages.push(recipeResult);
 
             this.addRecipes(recipeResult.recipes);
-        }
-    }, {
-        key: 'applyScores',
-        value: function applyScores(result) {
-            result.recipes.forEach(function (r) {
-                r.score = getRecipeScore(r);
-            });
-
-            result.recipes = result.recipes.sort(function (a, b) {
-                return b.score - a.score;
-            });
-
-            return result;
         }
     }, {
         key: 'addRecipes',
@@ -244,7 +229,7 @@ export var RecipeApp = function (_React$Component) {
                 return c.selected;
             });
 
-            this.state.recipeAppApi.recipeSearch(this.state.selectedIngredients, selectedCuisines, nextPage).catch(this.handleError).then(this.applyScores).then(this.addFetchedPage);
+            this.state.recipeAppApi.recipeSearch(this.state.selectedIngredients, selectedCuisines, nextPage).catch(this.handleError).then(this.addFetchedPage);
         }
     }, {
         key: 'onIngredientRemoved',
@@ -439,7 +424,8 @@ export var RecipeApp = function (_React$Component) {
                     ),
                     React.createElement(CuisinePicker, { cuisines: this.state.cuisines, rankedCuisines: this.state.rankedCuisines, onCuisineToggled: this.onCuisineToggled }),
                     React.createElement(BackToTopPanel, null),
-                    React.createElement(RecipesList, { loading: this.state.loadingRecipes, recipes: this.state.recipes, selectedIngredients: this.state.selectedIngredients, debug: this.state.debug })
+                    React.createElement(RecipesList, { loading: this.state.loadingRecipes, recipes: this.state.recipes, selectedIngredients: this.state.selectedIngredients, debug: this.state.debug,
+                        badImageUrl: this.state.recipeAppApi.getBadImageUrl() })
                 );
             } else {
                 return React.createElement(

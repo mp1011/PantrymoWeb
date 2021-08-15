@@ -66,7 +66,7 @@ export var RecipesList = function (_React$Component) {
                   "ul",
                   { className: "recipeList" },
                   this.props.recipes.map(function (r) {
-                     return React.createElement(Recipe, Object.assign({ key: r.key, debug: _this2.props.debug, selectedIngredients: _this2.props.selectedIngredients }, r));
+                     return React.createElement(Recipe, Object.assign({ key: r.key, badImageUrl: _this2.props.badImageUrl, debug: _this2.props.debug, selectedIngredients: _this2.props.selectedIngredients }, r));
                   }),
                   loader
                )
@@ -88,6 +88,7 @@ export var Recipe = function (_React$Component2) {
 
       _this3.getCssClass = _this3.getCssClass.bind(_this3);
       _this3.renderIngredient = _this3.renderIngredient.bind(_this3);
+      _this3.onImageError = _this3.onImageError.bind(_this3);
       return _this3;
    }
 
@@ -130,6 +131,11 @@ export var Recipe = function (_React$Component2) {
    }, {
       key: "componentDidMount",
       value: function componentDidMount() {}
+   }, {
+      key: "onImageError",
+      value: function onImageError(e) {
+         e.target.src = this.props.badImageUrl;
+      }
    }, {
       key: "render",
       value: function render() {
@@ -174,7 +180,9 @@ export var Recipe = function (_React$Component2) {
                null,
                React.createElement(
                   "a",
-                  { target: "_blank", rel: "noopener noreferrer", href: this.props.url },
+                  { target: "_blank",
+                     rel: "noopener noreferrer",
+                     href: this.props.url },
                   this.props.name
                )
             ),
@@ -191,7 +199,7 @@ export var Recipe = function (_React$Component2) {
             React.createElement(
                "a",
                { target: "_blank", rel: "noopener noreferrer", className: "recipeImage", href: this.props.url },
-               React.createElement("img", { src: this.props.image })
+               React.createElement("img", { onError: this.onImageError, src: this.props.image })
             ),
             this.props.debug ? React.createElement(
                "p",

@@ -25,7 +25,7 @@ export class RecipesList extends React.Component
       {
             return <div id="recipeListContainer">         
                <ul className="recipeList">
-                  {this.props.recipes.map(r=> <Recipe key={r.key} debug={this.props.debug} selectedIngredients={this.props.selectedIngredients} {...r} />)}
+                  {this.props.recipes.map(r=> <Recipe key={r.key} badImageUrl={this.props.badImageUrl} debug={this.props.debug} selectedIngredients={this.props.selectedIngredients} {...r} />)}
                   {loader}                 
                </ul>
             </div>
@@ -40,6 +40,7 @@ export class Recipe extends React.Component
       super(props);         
       this.getCssClass = this.getCssClass.bind(this);
       this.renderIngredient = this.renderIngredient.bind(this);
+      this.onImageError = this.onImageError.bind(this);
     }
 
     getCssClass(ingredient)
@@ -71,6 +72,11 @@ export class Recipe extends React.Component
     componentDidMount()
     {
     }
+
+    onImageError(e)
+    {
+         e.target.src =this.props.badImageUrl;
+    }
    
     render() 
     {   
@@ -96,13 +102,17 @@ export class Recipe extends React.Component
             ingredients.push(<li key="extra">+{unknownIngredients.length} more</li>);
          }
       }
-
+      
        return <section className="recipe">
-                  <h1><a target="_blank" rel="noopener noreferrer" href={this.props.url}>{this.props.name}</a></h1>
+                  <h1><a   target="_blank" 
+                           rel="noopener noreferrer" 
+                           href={this.props.url}>{this.props.name}
+                        </a>
+                  </h1>
                   <h2>{this.props.source}</h2>
                   <ul className="ingredientsList">{ingredients}</ul>        
                   <a target="_blank" rel="noopener noreferrer" className="recipeImage" href={this.props.url}>
-                     <img src={this.props.image}/>
+                     <img onError={this.onImageError}  src={this.props.image}/>
                   </a>  
                   {this.props.debug ? <p>{this.props.score}</p> : "" }
                </section>;

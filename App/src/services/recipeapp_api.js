@@ -61,6 +61,11 @@ export class RecipeAppApi
 
     }
 
+    getBadImageUrl()
+    {
+        return `https://${settings.host}/images/sitedefaults/Default.png`;
+    }
+
     //shows error in console, however caller is responsible for doing something about it
     showErrorInConsole(e)
     {
