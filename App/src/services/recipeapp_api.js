@@ -42,6 +42,14 @@ export class RecipeAppApi
             .then(r=> { return { page: page, recipes: r, loaded:true }});
     }
 
+    recipeTraitCounts(query, selectedCuisines)
+    {
+        const cuisineCSV = selectedCuisines.map(c=> c.name).join(",");
+       
+        return this.httpUtility.getJson(`https://${settings.host}/api/Recipe/TraitCounts?ingredients=${query}&cuisines=${cuisineCSV}`, this.validResult)
+            .catch(this.showErrorInConsole);
+    }
+
     ingredientSearch(query)
     {
         return this.httpUtility.getJson(`https://${settings.host}/api/Ingredient/Suggest?text=${query}`, this.validResult)

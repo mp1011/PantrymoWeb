@@ -8,6 +8,7 @@ import {RecipesList} from '/src/jsx/components/recipes_list.js'
 import {StateHandler} from '/src/services/state_handler.js'
 import {settings} from '/src/app_settings.mjs'
 import {PairingSuggestionsPanel} from '/src/jsx/components/pairing_suggestions.js'
+import {AdvancedSearch} from '/src/jsx/components/advanced_search.js'
 
 // eslint-disable-next-line no-undef
 export class RecipeApp extends React.Component 
@@ -33,6 +34,7 @@ export class RecipeApp extends React.Component
       this.updateCuisines = this.updateCuisines.bind(this);
       this.onSuggestedIngredientSelected = this.onSuggestedIngredientSelected.bind(this);
       this.suggestPairings = this.suggestPairings.bind(this);
+      this.getRecipeStats = this.getRecipeStats.bind(this);
 
       var httpUtility = props.httpUtility;
       var stateHandler = new StateHandler();
@@ -47,7 +49,8 @@ export class RecipeApp extends React.Component
                       recipeAppApi: recipeAppApi,
                       stateHandler: stateHandler,
                       debug: settings.debugMode,
-                      suggestedPairings: []
+                      suggestedPairings: [],
+                      stats: null
                    };
     }
 
@@ -82,12 +85,20 @@ export class RecipeApp extends React.Component
         })
     }
 
-    
+    getRecipeStats()
+    {
+      let selectedCuisines = this.state.cuisines
+        .filter(c=>c.selected)
+        .map(c=>c.name);
+
+      this.state.recipeAppApi.recipeTraitCounts(this.state.selectedIngredients, selectedCuisines)
+        .then(stats=> this.setState({stats: stats}));
+    }
+
     onSuggestedIngredientSelected(ingredient)
     {
         this.onIngredientAdded(ingredient);
     }
-
 
     updateCuisines(ingredients)
     {  
@@ -118,6 +129,7 @@ export class RecipeApp extends React.Component
         this.setState({recipes: [], recipePages: [], selectedIngredients: ingredients});
         
         this.suggestPairings();     
+        this.getRecipeStats();
 
         this.state.recipeAppApi
               .recipeSearch(ingredients, selectedCuisines, 1)
@@ -398,7 +410,9 @@ export class RecipeApp extends React.Component
                 <SelectedIngredientsPanel selectedIngredients={this.state.selectedIngredients} onIngredientRemoved={this.onIngredientRemoved} />
                 <IngredientInputBox onIngredientAdded={this.onIngredientAdded} recipeAppApi={this.state.recipeAppApi} selectedIngredients={this.state.selectedIngredients} />
                 <PairingSuggestionsPanel suggestedPairings={this.state.suggestedPairings} onSuggestedIngredientSelected={this.onSuggestedIngredientSelected} />
-              </section>           
+              </section>   
+
+              <AdvancedSearch stats={this.state.stats}></AdvancedSearch>        
 
               <CuisinePicker cuisines={this.state.cuisines} rankedCuisines={this.state.rankedCuisines} onCuisineToggled={this.onCuisineToggled} />         
                  
