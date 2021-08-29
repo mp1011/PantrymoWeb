@@ -4,16 +4,28 @@ export class StateHandler
     {
         let ingredients = data.ingredients ?? this.getIngredientsFromHash() ?? [];
         let cuisines = data.cuisines ?? this.getCuisinesFromHash() ?? [];
+        let traits = data.traits ?? this.getTraitsFromHash() ?? [];
 
         let ingredientList = ingredients.join();
         let cuisineList = cuisines.join();
+        let traitsList = traits.join();
 
         let newHash="";
 
-        if(ingredients.length > 0 && cuisines.length > 0)
+        if(ingredients.length > 0 && cuisines.length > 0 && traits.length > 0)
+        {
+            newHash = `ingredients=${ingredientList}&cuisines=${cuisineList}&traits=${traitsList}`;       
+            document.title = `Pantrymo - ${ingredientList} - ${traitsList}`;
+        }
+        else if(ingredients.length > 0 && cuisines.length > 0)
         {
             newHash = `ingredients=${ingredientList}&cuisines=${cuisineList}`;       
             document.title = `Pantrymo - ${ingredientList}`;
+        }
+        else if(ingredients.length > 0 && traits.length > 0)
+        {
+            newHash = `ingredients=${ingredientList}&traits=${traitsList}`;       
+            document.title = `Pantrymo - ${ingredientList} - ${traitsList}`;
         }
         else if(ingredients.length > 0)
         {
@@ -44,11 +56,12 @@ export class StateHandler
     {
         let ingredients = this.getIngredientsFromHash() ?? this.getIngredientsFromSession() ?? [];
         let selectedCuisines = this.getCuisinesFromHash() ?? this.getCuisinesFromSession() ?? [];
+        let selectedTraits = this.getTraitsFromHash() ?? this.getTraitsFromSession() ?? [];
 
         if(selectedCuisines.length == 0)
             selectedCuisines = this.getCuisinesFromCookie();
 
-        this.updateUrl({ cuisines: selectedCuisines, ingredients: ingredients });
+        this.updateUrl({ cuisines: selectedCuisines, ingredients: ingredients, traits: selectedTraits });
 
         let state = { selectedCuisines: selectedCuisines, selectedIngredients: ingredients};
 
@@ -74,6 +87,19 @@ export class StateHandler
         if(cuisines && cuisines.length > 0)
         {
             return cuisines
+                .split(',')
+                .filter(c=>c.length>0);
+        }
+
+        return null;
+    }
+
+    geTraitsFromSession()
+    {
+        let traits = window.sessionStorage.getItem('traits');
+        if(traits && traits.length > 0)
+        {
+            return traits
                 .split(',')
                 .filter(c=>c.length>0);
         }
@@ -110,6 +136,12 @@ export class StateHandler
     {
         this.updateUrl({ ingredients: ingredients });
         window.sessionStorage.setItem('ingredients', ingredients);
+    }
+
+    onFilterTraitsChanged(traits)
+    {
+        this.updateUrl({ traits: traits });
+        window.sessionStorage.setItem('traits', traits);
     }
 
     onCuisineToggled(cuisine)
@@ -164,6 +196,31 @@ export class StateHandler
             let result = window.location.hash.substring(1)
                         .split('&')
                         .find(c=>c.split('=')[0] == 'cuisines')
+                        .split('=')[1]
+                        .split(',')
+                        .map(c=> decodeURIComponent(c))
+                        .filter(c=>c.length>0);
+            if(result.length > 0)
+                return result;
+            else 
+                return null;
+        }
+        catch 
+        {
+            return null;
+        }
+    }
+
+    getTraitsFromHash()
+    {
+        if(!window.location.hash)
+            return null;
+
+        try
+        {
+            let result = window.location.hash.substring(1)
+                        .split('&')
+                        .find(c=>c.split('=')[0] == 'traits')
                         .split('=')[1]
                         .split(',')
                         .map(c=> decodeURIComponent(c))

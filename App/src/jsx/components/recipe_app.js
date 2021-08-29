@@ -46,6 +46,7 @@ export var RecipeApp = function (_React$Component) {
         _this.onSuggestedIngredientSelected = _this.onSuggestedIngredientSelected.bind(_this);
         _this.suggestPairings = _this.suggestPairings.bind(_this);
         _this.getRecipeStats = _this.getRecipeStats.bind(_this);
+        _this.onAdvancedSearchSelectionToggled = _this.onAdvancedSearchSelectionToggled.bind(_this);
 
         var httpUtility = props.httpUtility;
         var stateHandler = new StateHandler();
@@ -54,6 +55,8 @@ export var RecipeApp = function (_React$Component) {
         _this.state = {
             selectedIngredients: [],
             cuisines: [],
+            traitFilters: [],
+            matchMinimum: 1,
             recipePages: [],
             recipes: [],
             httpUtility: httpUtility,
@@ -61,7 +64,8 @@ export var RecipeApp = function (_React$Component) {
             stateHandler: stateHandler,
             debug: settings.debugMode,
             suggestedPairings: [],
-            stats: null
+            stats: null,
+            advancedSearchFilters: {}
         };
         return _this;
     }
@@ -109,7 +113,12 @@ export var RecipeApp = function (_React$Component) {
                 return c.name;
             });
 
-            this.state.recipeAppApi.recipeTraitCounts(this.state.selectedIngredients, selectedCuisines).then(function (stats) {
+            var filters = this.state.advancedSearchFilters;
+            var traitFilters = Object.values(filters).reduce(function (a, b) {
+                return a.concat(b);
+            }, []);
+
+            this.state.recipeAppApi.recipeTraitCounts(this.state.selectedIngredients, selectedCuisines, traitFilters).then(function (stats) {
                 return _this3.setState({ stats: stats });
             });
         }
@@ -154,7 +163,7 @@ export var RecipeApp = function (_React$Component) {
             this.suggestPairings();
             this.getRecipeStats();
 
-            this.state.recipeAppApi.recipeSearch(ingredients, selectedCuisines, 1).catch(this.handleError).then(this.addFetchedPage);
+            this.state.recipeAppApi.recipeSearch(ingredients, selectedCuisines, this.state.traitFilters, this.state.matchMinimum, 1).catch(this.handleError).then(this.addFetchedPage);
         }
     }, {
         key: 'addFetchedPage',
@@ -248,7 +257,7 @@ export var RecipeApp = function (_React$Component) {
                 return c.selected;
             });
 
-            this.state.recipeAppApi.recipeSearch(this.state.selectedIngredients, selectedCuisines, nextPage).catch(this.handleError).then(this.addFetchedPage);
+            this.state.recipeAppApi.recipeSearch(this.state.selectedIngredients, selectedCuisines, this.state.traitFilters, this.state.matchMinimum, nextPage).catch(this.handleError).then(this.addFetchedPage);
         }
     }, {
         key: 'onIngredientRemoved',
@@ -428,6 +437,23 @@ export var RecipeApp = function (_React$Component) {
             return index;
         }
     }, {
+        key: 'onAdvancedSearchSelectionToggled',
+        value: function onAdvancedSearchSelectionToggled(trait, selectedValues) {
+            var _this7 = this;
+
+            var filters = this.state.advancedSearchFilters;
+            filters[trait] = selectedValues;
+
+            var traitFilters = Object.values(filters).reduce(function (a, b) {
+                return a.concat(b);
+            }, []);
+
+            this.state.stateHandler.onFilterTraitsChanged(traitFilters);
+            this.setState({ advancedSearchFilters: filters, traitFilters: traitFilters }, function () {
+                return _this7.updateRecipes(_this7.state.selectedIngredients, false);
+            });
+        }
+    }, {
         key: 'render',
         value: function render() {
             if (this.state.isSiteReady) {
@@ -441,7 +467,7 @@ export var RecipeApp = function (_React$Component) {
                         React.createElement(IngredientInputBox, { onIngredientAdded: this.onIngredientAdded, recipeAppApi: this.state.recipeAppApi, selectedIngredients: this.state.selectedIngredients }),
                         React.createElement(PairingSuggestionsPanel, { suggestedPairings: this.state.suggestedPairings, onSuggestedIngredientSelected: this.onSuggestedIngredientSelected })
                     ),
-                    React.createElement(AdvancedSearch, { stats: this.state.stats }),
+                    React.createElement(AdvancedSearch, { stats: this.state.stats, onSelectionToggled: this.onAdvancedSearchSelectionToggled }),
                     React.createElement(CuisinePicker, { cuisines: this.state.cuisines, rankedCuisines: this.state.rankedCuisines, onCuisineToggled: this.onCuisineToggled }),
                     React.createElement(BackToTopPanel, null),
                     React.createElement(RecipesList, { loading: this.state.loadingRecipes, recipes: this.state.recipes, selectedIngredients: this.state.selectedIngredients, debug: this.state.debug,

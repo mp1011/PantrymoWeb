@@ -1067,3 +1067,59 @@ input
 {
     cursor:pointer;
 }
+
+.traitSearchFilter input.selected 
+{
+    background-color: red;
+}
+
+.traitSearchFilter .dropdownOptions 
+{
+    display:none;
+}
+
+.traitSearchFilter .dropdownOptions.appear
+{
+    display:inherit;
+}
+
+.advancedSearch ul.traitFilter
+{
+    display:flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.advancedSearch ul 
+{
+    list-style-type: none;
+}
+
+.advancedSearch h1 
+{
+    border-bottom:solid 1px black;
+    margin-bottom:0.5rem;
+    text-align: center;
+}
+
+.advancedSearch .traitSearchFilter
+{
+    padding-left:1rem;
+    padding-right:1rem;    
+    width:10rem;
+    padding-bottom:2rem;
+}
+
+.advancedSearch input
+{
+    background-color: white;
+    border-radius: 10px;
+    border-top: solid 2px rgb(165, 165, 199);
+    border-right: solid 2px rgb(75, 75, 85);
+    border-left: solid 2px rgb(127, 127, 175);
+    border-bottom: solid 2px rgb(71, 71, 83);
+    padding:0.2rem 0.5rem 0.2rem 0.5rem;
+    font-family: 'Ebrima';
+    outline-width: 0;
+    width:100%;
+}

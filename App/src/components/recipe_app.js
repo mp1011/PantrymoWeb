@@ -35,6 +35,7 @@ export class RecipeApp extends React.Component
       this.onSuggestedIngredientSelected = this.onSuggestedIngredientSelected.bind(this);
       this.suggestPairings = this.suggestPairings.bind(this);
       this.getRecipeStats = this.getRecipeStats.bind(this);
+      this.onAdvancedSearchSelectionToggled = this.onAdvancedSearchSelectionToggled.bind(this);
 
       var httpUtility = props.httpUtility;
       var stateHandler = new StateHandler();
@@ -43,6 +44,8 @@ export class RecipeApp extends React.Component
       this.state = {
                       selectedIngredients: [], 
                       cuisines: [],
+                      traitFilters: [], 
+                      matchMinimum: 1,
                       recipePages: [],
                       recipes: [],
                       httpUtility: httpUtility,
@@ -50,7 +53,8 @@ export class RecipeApp extends React.Component
                       stateHandler: stateHandler,
                       debug: settings.debugMode,
                       suggestedPairings: [],
-                      stats: null
+                      stats: null,
+                      advancedSearchFilters:{}
                    };
     }
 
@@ -91,7 +95,11 @@ export class RecipeApp extends React.Component
         .filter(c=>c.selected)
         .map(c=>c.name);
 
-      this.state.recipeAppApi.recipeTraitCounts(this.state.selectedIngredients, selectedCuisines)
+      var filters = this.state.advancedSearchFilters;
+      var traitFilters = Object.values(filters)
+                             .reduce((a,b) => a.concat(b), []);
+
+      this.state.recipeAppApi.recipeTraitCounts(this.state.selectedIngredients, selectedCuisines, traitFilters)
         .then(stats=> this.setState({stats: stats}));
     }
 
@@ -132,7 +140,7 @@ export class RecipeApp extends React.Component
         this.getRecipeStats();
 
         this.state.recipeAppApi
-              .recipeSearch(ingredients, selectedCuisines, 1)
+              .recipeSearch(ingredients, selectedCuisines, this.state.traitFilters, this.state.matchMinimum, 1)
               .catch(this.handleError)
               .then(this.addFetchedPage);
     }
@@ -227,7 +235,7 @@ export class RecipeApp extends React.Component
       const selectedCuisines = this.state.cuisines.filter(c=>c.selected);
 
       this.state.recipeAppApi
-        .recipeSearch(this.state.selectedIngredients, selectedCuisines, nextPage)
+        .recipeSearch(this.state.selectedIngredients, selectedCuisines, this.state.traitFilters, this.state.matchMinimum, nextPage)
         .catch(this.handleError)
         .then(this.addFetchedPage);
       
@@ -399,6 +407,19 @@ export class RecipeApp extends React.Component
         return index;
     }
 
+    onAdvancedSearchSelectionToggled(trait, selectedValues)
+    {       
+        var filters = this.state.advancedSearchFilters;
+        filters[trait] = selectedValues;
+
+        var traitFilters = Object.values(filters)
+                             .reduce((a,b) => a.concat(b), []);
+                             
+        this.state.stateHandler.onFilterTraitsChanged(traitFilters);
+        this.setState( { advancedSearchFilters: filters, traitFilters: traitFilters}, 
+          () => this.updateRecipes(this.state.selectedIngredients, false));
+    }
+
     render() 
     {
         if(this.state.isSiteReady)
@@ -412,7 +433,7 @@ export class RecipeApp extends React.Component
                 <PairingSuggestionsPanel suggestedPairings={this.state.suggestedPairings} onSuggestedIngredientSelected={this.onSuggestedIngredientSelected} />
               </section>   
 
-              <AdvancedSearch stats={this.state.stats}></AdvancedSearch>        
+              <AdvancedSearch stats={this.state.stats} onSelectionToggled={this.onAdvancedSearchSelectionToggled}></AdvancedSearch>        
 
               <CuisinePicker cuisines={this.state.cuisines} rankedCuisines={this.state.rankedCuisines} onCuisineToggled={this.onCuisineToggled} />         
                  

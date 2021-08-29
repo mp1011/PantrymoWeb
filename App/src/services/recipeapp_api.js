@@ -30,23 +30,25 @@ export class RecipeAppApi
             .catch(this.showErrorInConsole);
     }
 
-    recipeSearch(query, selectedCuisines, page)
+    recipeSearch(query, selectedCuisines, traitFilters, matchMinimum, page)
     {  
         const from = (page-1) * this.pageSize;
         const to = (page * this.pageSize)-1;   
            
         const cuisineCSV = selectedCuisines.map(c=> c.name).join(",");
-        
-        return this.httpUtility.getJson(`https://${settings.host}/api/Recipe/Find?ingredients=${query}&cuisines=${cuisineCSV}&from=${from}&to=${to}`, this.validResult)
+        const traitFiltersCSV = traitFilters.join(",");
+
+        return this.httpUtility.getJson(`https://${settings.host}/api/Recipe/Find?ingredients=${query}&cuisines=${cuisineCSV}&traits=${traitFiltersCSV}&matchMinimum=${matchMinimum}&from=${from}&to=${to}`, this.validResult)
             .catch(this.showErrorInConsole)
             .then(r=> { return { page: page, recipes: r, loaded:true }});
     }
 
-    recipeTraitCounts(query, selectedCuisines)
+    recipeTraitCounts(query, selectedCuisines,traitFilters)
     {
         const cuisineCSV = selectedCuisines.map(c=> c.name).join(",");
-       
-        return this.httpUtility.getJson(`https://${settings.host}/api/Recipe/TraitCounts?ingredients=${query}&cuisines=${cuisineCSV}`, this.validResult)
+        const traitsCSV = traitFilters.join(",");
+
+        return this.httpUtility.getJson(`https://${settings.host}/api/Recipe/TraitCounts?ingredients=${query}&cuisines=${cuisineCSV}&traits=${traitsCSV}`, this.validResult)
             .catch(this.showErrorInConsole);
     }
 

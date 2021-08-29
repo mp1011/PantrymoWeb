@@ -18,16 +18,26 @@ export var AdvancedSearch = function (_React$Component) {
     _createClass(AdvancedSearch, [{
         key: "render",
         value: function render() {
+            var _this2 = this;
+
             if (!this.props.stats) return "";
 
             var filters = this.props.stats.traitStats.map(function (t) {
-                return React.createElement(TraitSearchFilter, { trait: t.trait });
+                return React.createElement(
+                    "li",
+                    { key: t.trait },
+                    React.createElement(TraitSearchFilter, { traitStats: t, onSelectionToggled: _this2.props.onSelectionToggled })
+                );
             });
 
             return React.createElement(
                 "section",
                 { className: "whiteBox advancedSearch" },
-                filters
+                React.createElement(
+                    "ul",
+                    { className: "traitFilter" },
+                    filters
+                )
             );
         }
     }]);
@@ -41,16 +51,78 @@ export var TraitSearchFilter = function (_React$Component2) {
     function TraitSearchFilter(props) {
         _classCallCheck(this, TraitSearchFilter);
 
-        return _possibleConstructorReturn(this, (TraitSearchFilter.__proto__ || Object.getPrototypeOf(TraitSearchFilter)).call(this, props));
+        var _this3 = _possibleConstructorReturn(this, (TraitSearchFilter.__proto__ || Object.getPrototypeOf(TraitSearchFilter)).call(this, props));
+
+        _this3.toggleSelection = _this3.toggleSelection.bind(_this3);
+        _this3.openDropdown = _this3.openDropdown.bind(_this3);
+
+        _this3.state = {
+            values: []
+        };
+        return _this3;
     }
 
     _createClass(TraitSearchFilter, [{
+        key: "openDropdown",
+        value: function openDropdown() {
+            var dropdown = document.getElementById("selector_" + this.props.traitStats.trait.replace("/", ""));
+            if (!dropdown.className.includes("appear")) dropdown.className += " appear";
+
+            var anyBtnId = "anybtn_" + this.props.traitStats.trait.replace("/", "");
+            document.getElementById(anyBtnId).style["display"] = "none";
+
+            this.setState({ dropDownOpen: true });
+        }
+    }, {
+        key: "toggleSelection",
+        value: function toggleSelection(evt) {
+            var selection = evt.target.dataset.val;
+
+            var selectedValues = this.state.values;
+            if (!selectedValues.includes(selection)) {
+                selectedValues.push(selection);
+            } else {
+                var index = selectedValues.indexOf(selection);
+                selectedValues.splice(index, 1);
+            }
+
+            this.setState({ values: selectedValues });
+
+            this.props.onSelectionToggled(this.props.traitStats.trait, selectedValues);
+        }
+    }, {
         key: "render",
         value: function render() {
+            var _this4 = this;
+
+            var dropdownId = "selector_" + this.props.traitStats.trait.replace("/", "");
+            var anyBtnId = "anybtn_" + this.props.traitStats.trait.replace("/", "");
+
+            var selectedValues = this.state.values;
+            var anyButton = "";
+            if (!this.state.dropDownOpen) anyButton = React.createElement("input", { id: anyBtnId, type: "button", onClick: this.openDropdown, value: "any" });
+
+            var options = this.props.traitStats.traitValueStats.map(function (p) {
+                var text = p.value + " (" + p.count + ")";
+                var className = selectedValues.includes(p.value) ? "selected" : "";
+
+                return React.createElement("input", { key: p.value, type: "button", onClick: _this4.toggleSelection, "data-val": p.value, className: className, value: text });
+            });
+
             return React.createElement(
-                "p",
-                null,
-                this.props.trait
+                "section",
+                { className: "traitSearchFilter" },
+                React.createElement(
+                    "h1",
+                    null,
+                    this.props.traitStats.trait
+                ),
+                anyButton,
+                React.createElement(
+                    "ul",
+                    { id: dropdownId, className: "dropdownOptions" },
+                    options
+                )
             );
         }
     }]);
